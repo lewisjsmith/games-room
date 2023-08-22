@@ -15,4 +15,10 @@ StudioSchema.virtual("url").get(function() {
     return `/library/studio/${this._id}`;
 });
 
-module.exports = mongoose.model("Studio", StudioSchema);
+const Studio = mongoose.model<IStudio>("Studio", StudioSchema);
+export default Studio;
+
+interface IStudio extends mongoose.Document {
+    title: String,
+    founded: Date
+}

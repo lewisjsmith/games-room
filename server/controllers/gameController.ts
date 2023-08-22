@@ -1,12 +1,33 @@
-import {GameModel as Game} from "../models/game";
+import GameModel from "../models/game";
+
+import express from "express";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
-const index = asyncHandler(async (req, res, next) => {
-    res.send("This is the Library Index");
+/* router.post("/game/create", () => {});
+router.get("/game/:id", () => {});
+router.post("/game/:id/update", () => {});
+router.post("/game/:id/delete", () => {});
+router.get("/games", () => {}); */
+
+const getGameById = asyncHandler(async (req, res, next) => {
+    const game = await GameModel.find({ _id: req.params.id })
+        .select({ "_id": 0, "title": 1 }).lean().exec();
+    res.json(game);
 });
 
-const game = asyncHandler(async (req, res, next) => {
-    res.send("This is the games section of the library!");
+const createGame = asyncHandler(async (req, res, next) => {
+
+    const body = req.body;
+
+    console.log(body);
+
+    // working, just needs better typing or fail conditions for not knowing genre
+    const details = {title: body.title, studio: body.studio, genre: body.genre, releaseDate: body.releaseDate }
+    const game = new GameModel(details);
+    await game.save();
+    console.log(`Added game: ${details.title}`);
+    res.end();
 });
 
-export const GameController = {index, game};
+module.exports = { getGameById, createGame };
