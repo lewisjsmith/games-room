@@ -25,7 +25,7 @@ const Game = mongoose.model<IGame>("game", GameSchema);
 export default Game;
 
 interface IGame extends mongoose.Document {
-    title: String,
+    title: string,
     studio: mongoose.Schema.Types.ObjectId,
     genre: mongoose.Schema.Types.ObjectId,
     releaseDate: Date

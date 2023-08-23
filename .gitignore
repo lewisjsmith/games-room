@@ -3,3 +3,4 @@ dist
 node_modules
 populatedb.ts
 populatedb.js
+setup

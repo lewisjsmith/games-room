@@ -1,6 +1,6 @@
 import express from "express";
 
-import {getGameById, createGame} from "../controllers/gameController";
+import {getGameById, createGame, gameIndex} from "../controllers/gameController";
 import {getStudios} from "../controllers/studioController";
 import {getGenres} from "../controllers/genreController";
 
@@ -9,9 +9,16 @@ export const router = express.Router();
 router.post("/game/create", createGame);
 router.get("/game/:id", getGameById);
 
+// router.post("/test", (req, res, next) => {
+//     console.log("Testing...")
+//     console.log(req.body);
+//     res.json({value: "Success!"});
+// })
+
 router.post("/game/:id/update", () => {});
 router.post("/game/:id/delete", () => {});
 router.get("/games", () => {});
+router.get("/game/", gameIndex);
 
 router.post("/studio/create", () => {});
 router.get("/studio/:id", () => {});

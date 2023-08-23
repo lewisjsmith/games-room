@@ -10,24 +10,42 @@ router.post("/game/:id/update", () => {});
 router.post("/game/:id/delete", () => {});
 router.get("/games", () => {}); */
 
-const getGameById = asyncHandler(async (req, res, next) => {
-    const game = await GameModel.find({ _id: req.params.id })
-        .select({ "_id": 0, "title": 1 }).lean().exec();
-    res.json(game);
+export const gameIndex = asyncHandler(async (req, res, next) => {
+    res.status(400).json({errors: "Invalid URL"});
+})
+
+export const getGameById = asyncHandler(async (req, res, next) => {
+
+    let game = [{ "_id": "", "title": "" }];
+
+    try {
+        game = await GameModel.find({ _id: req.params.id })
+            .select({"_id": 0, "title": 1 }).lean().exec();
+        res.json(game);
+    }
+    catch (err) {
+        res.status(400).json({errors: "Invalid URL"});
+    }
+
 });
 
-const createGame = asyncHandler(async (req, res, next) => {
 
-    const body = req.body;
+export const createGame = asyncHandler(async (req, res, next) => {
 
-    console.log(body);
+    const body: GameBody = req.body;
 
     // working, just needs better typing or fail conditions for not knowing genre
-    const details = {title: body.title, studio: body.studio, genre: body.genre, releaseDate: body.releaseDate }
+    const details = { title: body.title, studio: body.studio, genre: body.genre, releaseDate: body.releaseDate }
     const game = new GameModel(details);
     await game.save();
     console.log(`Added game: ${details.title}`);
     res.end();
+
 });
 
-module.exports = { getGameById, createGame };
+interface GameBody {
+    title: string,
+    studio: mongoose.Types.ObjectId,
+    genre: mongoose.Types.ObjectId,
+    releaseDate: Date
+}
