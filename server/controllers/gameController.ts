@@ -184,7 +184,7 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
         if (response) {
             res.status(200).send("deleted");
         } else {
-            res.status(400).json({errors: "ID not found."});
+            res.status(400).json({ errors: "ID not found." });
         }
 
     } catch (err) {
@@ -193,7 +193,24 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
 
 });
 
+export const getGamesList = asyncHandler(async (req, res, next) => {
 
+    try {
+        const response = await GameModel
+            .find({})
+            .lean()
+            .exec();
+
+        if (response) {
+            res.status(200).json(response);
+        } else {
+            res.status(400).json({errors: "Games list not found."});
+        }
+    } catch (err) {
+        res.status(400).json({errors: err});
+    }
+
+});
 
 interface GameBody {
     title: string,

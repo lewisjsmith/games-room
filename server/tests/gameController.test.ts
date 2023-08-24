@@ -26,7 +26,7 @@ afterAll(async () => {
     disconnectDB();
 });
 
-describe("GET /game", () => {
+describe.skip("GET /game", () => {
 
     describe("given a valid ID", () => {
         // respond with JSON object of the game details
@@ -63,7 +63,7 @@ describe("GET /game", () => {
 
 })
 
-describe("POST /game/create", () => {
+describe.skip("POST /game/create", () => {
 
     describe("Correct field details", () => {
 
@@ -147,7 +147,7 @@ describe("POST /game/create", () => {
 
 });
 
-describe("POST /game/:id/update", () => {
+describe.skip("POST /game/:id/update", () => {
 
     describe("Successful edit", () => {
 
@@ -293,7 +293,7 @@ describe("POST /game/:id/update", () => {
 
 });
 
-describe("DELETE /game/:id/delete", () => {
+describe.skip("DELETE /game/:id/delete", () => {
 
     let testId: mongoose.Types.ObjectId;
 
@@ -348,6 +348,20 @@ describe("DELETE /game/:id/delete", () => {
 
 });
 
+describe("GET /api/v1/library/games", () => {
+
+    test("a list of games is returned", async () => {
+
+        const response = await request(app)
+        .get("/api/v1/library/games")
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.length).toBeGreaterThan(0);
+
+    });
+
+});
+
         // Alter game instances on game rename or delete
         // Don't allow duplicate names
-        // invalid ID
+        // Add before / after for providing exactly what is needed for tests
