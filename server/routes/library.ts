@@ -1,6 +1,6 @@
 import express from "express";
 
-import {getGameById, createGame, gameIndex} from "../controllers/gameController";
+import {getGameById, createGame, gameIndex, updateGame} from "../controllers/gameController";
 import {getStudios} from "../controllers/studioController";
 import {getGenres} from "../controllers/genreController";
 
@@ -15,7 +15,7 @@ router.get("/game/:id", getGameById);
 //     res.json({value: "Success!"});
 // })
 
-router.post("/game/:id/update", () => {});
+router.post("/game/:id/update", updateGame);
 router.post("/game/:id/delete", () => {});
 router.get("/games", () => {});
 router.get("/game/", gameIndex);
