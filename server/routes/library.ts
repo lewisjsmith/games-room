@@ -1,6 +1,6 @@
 import express from "express";
 
-import {getGameById, createGame, gameIndex, updateGame} from "../controllers/gameController";
+import {getGameById, createGame, gameIndex, updateGame, deleteGame} from "../controllers/gameController";
 import {getStudios} from "../controllers/studioController";
 import {getGenres} from "../controllers/genreController";
 
@@ -16,7 +16,7 @@ router.get("/game/:id", getGameById);
 // })
 
 router.post("/game/:id/update", updateGame);
-router.post("/game/:id/delete", () => {});
+router.post("/game/:id/delete", deleteGame);
 router.get("/games", () => {});
 router.get("/game/", gameIndex);
 

@@ -6,7 +6,6 @@ import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
 
 /* 
-router.post("/game/:id/delete", () => {});
 router.get("/games", () => {}); 
 */
 
@@ -15,10 +14,14 @@ router.get("/games", () => {});
 // const d = new Date(1992, 9, 10, -offset)
 
 export const gameIndex = asyncHandler(async (req, res, next) => {
-    res.status(400).json({ errors: "Invalid URL" });
+    res.status(400).json({ errors: "Invalid URL." });
 })
 
 export const getGameById = asyncHandler(async (req, res, next) => {
+
+    if (!mongoose.isValidObjectId(req.params.id)) {
+        res.status(400).json({ errors: "Invalid ID." })
+    }
 
     let game = [{ "_id": "", "title": "" }];
 
@@ -30,7 +33,7 @@ export const getGameById = asyncHandler(async (req, res, next) => {
         res.status(200).json(game[0]);
     }
     catch (err) {
-        res.status(400).json({ errors: "Invalid URL" });
+        res.status(400).json({ errors: "Invalid URL." });
     }
 
 });
@@ -48,7 +51,7 @@ export const createGame = asyncHandler(async (req, res, next) => {
         const response = await game.save();
         res.status(200).json({ "_id": response["_id"] });
 
-    } catch (err) {
+    } catch (err: any) {
 
         const keys = Object.keys(err.errors);
         const errorFields = keys.join(" and ");
@@ -62,10 +65,18 @@ export const createGame = asyncHandler(async (req, res, next) => {
 
 export const updateGame = asyncHandler(async (req, res, next) => {
 
+    if (!mongoose.isValidObjectId(req.params.id)) {
+        res.status(400).json({ errors: "Invalid ID format." });
+    }
+
     const body: UpdateBody = req.body;
 
     if (Object.keys(body).length === 0) {
         res.status(400).json({ errors: "No updates requested." });
+    }
+
+    if (Object.keys(body).includes("title") && body.title?.trim() === "") {
+        res.status(400).json({ errors: "No input title." });
     }
 
     async function getStudioId() {
@@ -149,13 +160,39 @@ export const updateGame = asyncHandler(async (req, res, next) => {
         try {
             const response = await GameModel
                 .findOneAndUpdate({ "_id": req.params.id }, body);
-            res.status(200).json({ "_id": req.params.id });
+            if (response) {
+                res.status(200).json({ "_id": req.params.id });
+            } else {
+                res.status(400).json({ errors: "Invalid ID." });
+            }
+
+
         } catch (err) {
             res.status(400).json(err);
         }
     }
 
 })
+
+export const deleteGame = asyncHandler(async (req, res, next) => {
+
+    try {
+
+        const response = await GameModel
+            .findOneAndRemove({ "_id": req.params.id });
+
+        if (response) {
+            res.status(200).send("deleted");
+        } else {
+            res.status(400).json({errors: "ID not found."});
+        }
+
+    } catch (err) {
+        res.status(400).json({ errors: err });
+    }
+
+});
+
 
 
 interface GameBody {

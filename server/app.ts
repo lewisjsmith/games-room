@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { router as libraryRouter } from "./routes/library";
 
-export default function (databaseUri) {
+export default function (databaseUri: string) {
 
     const app = express();
 

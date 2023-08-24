@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import makeApp from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
@@ -24,43 +26,44 @@ afterAll(async () => {
     disconnectDB();
 });
 
-describe.skip("GET /game", () => {
+describe("GET /game", () => {
 
-    describe("given an valid ID", () => {
+    describe("given a valid ID", () => {
         // respond with JSON object of the game details
         // respond with a 200 status code 
         // specify json in the content type header
         test("should respond with a 200 status code", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e4df9c0f790ff853699f97")
+            const response = await request(app).get("/api/v1/library/game/64e744efee633153e98c0aca")
             expect(response.statusCode).toBe(200);
         });
 
         // Tests for keys here, title first
         test("should respond with a json object with needed keys", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e4df9c0f790ff853699f97")
+            const response = await request(app).get("/api/v1/library/game/64e744efee633153e98c0aca")
             expect(Object.keys(response.body)).toContain("title");
         });
     })
 
     describe("given an invalid ID", () => {
+
         // respond with 400 not found
         test("should respond with a 400 status code", async () => {
             const response = await request(app).get("/api/v1/library/game/123")
             expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid URL");
+            expect(response.body.errors).toBe("Invalid ID.");
         })
 
         // respond with 400 Invalid URL
         test("shouldn't respond with all games on this url", async () => {
             const response = await request(app).get("/api/v1/library/game/")
             expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid URL");
+            expect(response.body.errors).toBe("Invalid URL.");
         })
     })
 
 })
 
-describe.skip("POST /game/create", () => {
+describe("POST /game/create", () => {
 
     describe("Correct field details", () => {
 
@@ -140,8 +143,6 @@ describe.skip("POST /game/create", () => {
 
         });
 
-
-
     });
 
 });
@@ -150,7 +151,7 @@ describe("POST /game/:id/update", () => {
 
     describe("Successful edit", () => {
 
-        test.skip("Valid id and title should respond with 200/ok", async () => {
+        test("Valid id and title should respond with 200/ok", async () => {
 
             const title = "v2"
 
@@ -170,7 +171,7 @@ describe("POST /game/:id/update", () => {
 
         });
 
-        test.skip("Valid id and studio should respond with 200/ok", async () => {
+        test("Valid id and studio should respond with 200/ok", async () => {
 
             const studio = "Nintendo"
 
@@ -187,7 +188,7 @@ describe("POST /game/:id/update", () => {
 
         })
 
-        test.skip("Valid id and genre should respond with 200/ok", async () => {
+        test("Valid id and genre should respond with 200/ok", async () => {
 
             const genre = "RPG"
 
@@ -204,7 +205,7 @@ describe("POST /game/:id/update", () => {
 
         })
 
-        test.skip("Valid id && studio && genre should respond with 200/ok", async () => {
+        test("Valid id && studio && genre should respond with 200/ok", async () => {
 
             const title = "v4"
             const studio = "Activision"
@@ -244,9 +245,109 @@ describe("POST /game/:id/update", () => {
 
         });
 
-        // Need to alter game instances
-        // Don't allow duplicate names
+
+    })
+
+    describe("Edit errors", () => {
+
+        test("invalid input, title", async () => {
+
+            const response = await request(app)
+                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
+                .send({
+                    title: ""
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+
+            expect(response.statusCode).toBe(400);
+            expect(response.body.errors).toBe("No input title.");
+
+        });
+
+        test("invalid id but correct format", async () => {
+            const response = await request(app)
+                .post("/api/v1/library/game/64e744efee633153e98c0123/update")
+                .send({
+                    title: "Invalid ID"
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+            expect(response.statusCode).toBe(400);
+            expect(response.body.errors).toBe("Invalid ID.");
+        })
+
+        test("invalid id format", async () => {
+            const response = await request(app)
+                .post("/api/v1/library/game/invalid/update")
+                .send({
+                    title: "Invalid ID"
+                })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+            expect(response.statusCode).toBe(400);
+            expect(response.body.errors).toBe("Invalid ID format.");
+        });
+
+    });
+
+});
+
+describe("DELETE /game/:id/delete", () => {
+
+    let testId: mongoose.Types.ObjectId;
+
+    beforeEach(async () => {
+
+        const response = await request(app)
+            .post("/api/v1/library/game/create")
+            .send({
+                title: "Testing delete function",
+                studio: "64e4df9c0f790ff853699f90",
+                genre: "64e4df9c0f790ff853699f88",
+            })
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+
+        if (response.statusCode === 200) {
+
+            console.log("Test game created.");
+
+            const game = await Game
+                .find({ "title": "Testing delete function" })
+                .exec()
+
+            testId = game[0]._id
+
+        }
+    })
+
+    test("Return 200, id no longer found", async () => {
+
+        const response = await request(app)
+            .post(`/api/v1/library/game/${testId}/delete`)
+            .send("delete")
+        expect(response.statusCode).toBe(200);
+
+    })
+
+    test("Return 200, id no longer found", async () => {
+
+        const response = await request(app)
+            .post(`/api/v1/library/game/${testId}/delete`)
+            .send("delete")
+        expect(response.statusCode).toBe(200);
+
+        const retry = await request(app)
+            .post(`/api/v1/library/game/${testId}/delete`)
+            .send("delete")
+        expect(retry.statusCode).toBe(400);
+        expect(retry.body.errors).toBe("ID not found.");
 
     })
 
 });
+
+        // Alter game instances on game rename or delete
+        // Don't allow duplicate names
+        // invalid ID
