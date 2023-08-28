@@ -139,5 +139,3 @@ interface IdObject {
 }
 
 export default GameForm;
-
-// method='POST' action="/api/v1/library/game/create
