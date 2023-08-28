@@ -1,7 +1,7 @@
 import express from "express";
 
 import {getGameById, createGame, gameIndex, updateGame, deleteGame, getGamesList} from "../controllers/gameController";
-import {getStudios} from "../controllers/studioController";
+import {getStudioById, getStudios, studioIndex, createStudio, updateStudio, deleteStudio} from "../controllers/studioController";
 import {getGenres} from "../controllers/genreController";
 
 export const router = express.Router();
@@ -13,11 +13,12 @@ router.post("/game/:id/delete", deleteGame);
 router.get("/games", getGamesList);
 router.get("/game/", gameIndex);
 
-router.post("/studio/create", () => {});
-router.get("/studio/:id", () => {});
-router.post("/studio/:id/update", () => {});
-router.post("/studio/:id/delete", () => {});
+router.post("/studio/create", createStudio);
+router.get("/studio/:id", getStudioById);
+router.post("/studio/:id/update", updateStudio);
+router.post("/studio/:id/delete", deleteStudio);
 router.get("/studios", getStudios);
+router.get("/studio/", studioIndex);
 
 router.post("/console/create", () => {});
 router.get("/console/:id", () => {});

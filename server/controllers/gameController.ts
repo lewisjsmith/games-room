@@ -20,22 +20,24 @@ export const gameIndex = asyncHandler(async (req, res, next) => {
 export const getGameById = asyncHandler(async (req, res, next) => {
 
     if (!mongoose.isValidObjectId(req.params.id)) {
-        res.status(400).json({ errors: "Invalid ID." })
+        res.status(400).json({ errors: "Not an ObjectId." })
     }
 
-    let game = [{ "_id": "", "title": "" }];
-
     try {
-        game = await GameModel
+        const game = await GameModel
             .find({ _id: req.params.id })
-            .select({ "_id": 0, "title": 1 }).lean().exec();
+            .select({ "__v": 0 }).lean().exec();
 
-        res.status(200).json(game[0]);
+        if (game.length === 0) {
+            res.status(404).json({errors: "Game not found."})
+        } else {
+            res.status(200).json(game[0]);
+        }
+
     }
     catch (err) {
         res.status(400).json({ errors: "Invalid URL." });
     }
-
 });
 
 // need to not allow duplicate names
@@ -56,7 +58,6 @@ export const createGame = asyncHandler(async (req, res, next) => {
         const keys = Object.keys(err.errors);
         const errorFields = keys.join(" and ");
         const errorBody = { errors: `Invalid input(s) for ${errorFields}` };
-
         res.status(400).json(errorBody);
 
     }
@@ -204,10 +205,10 @@ export const getGamesList = asyncHandler(async (req, res, next) => {
         if (response) {
             res.status(200).json(response);
         } else {
-            res.status(400).json({errors: "Games list not found."});
+            res.status(400).json({ errors: "Games list not found." });
         }
     } catch (err) {
-        res.status(400).json({errors: err});
+        res.status(400).json({ errors: err });
     }
 
 });

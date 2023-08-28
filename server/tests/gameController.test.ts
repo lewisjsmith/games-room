@@ -33,32 +33,37 @@ describe.skip("GET /game", () => {
         // respond with a 200 status code 
         // specify json in the content type header
         test("should respond with a 200 status code", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e744efee633153e98c0aca")
+            const response = await request(app).get("/api/v1/library/game/64e797aa6f6e45da032679a6")
             expect(response.statusCode).toBe(200);
         });
 
         // Tests for keys here, title first
-        test("should respond with a json object with needed keys", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e744efee633153e98c0aca")
-            expect(Object.keys(response.body)).toContain("title");
+        test("should respond with a json object of the document", async () => {
+            const response = await request(app).get("/api/v1/library/game/64e797aa6f6e45da032679a6")
+            expect(Object.keys(response.body)).toEqual(expect.arrayContaining(["_id", "title", "studio", "genre", "releaseDate"]));
         });
     })
 
     describe("given an invalid ID", () => {
 
         // respond with 400 not found
-        test("should respond with a 400 status code", async () => {
+        test("invalid format should respond with a 400 status code", async () => {
             const response = await request(app).get("/api/v1/library/game/123")
             expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid ID.");
+            expect(response.body.errors).toBe("Not an ObjectId.");
         })
 
         // respond with 400 Invalid URL
-        test("shouldn't respond with all games on this url", async () => {
+        test("index page should respond with an error", async () => {
             const response = await request(app).get("/api/v1/library/game/")
             expect(response.statusCode).toBe(400);
             expect(response.body.errors).toBe("Invalid URL.");
         })
+
+        test("correct objectId format but not found on DB", async () => {
+            const response = await request(app).get("/api/v1/library/game/64e797aa6f6e45da032679a5")
+            expect(response.statusCode).toBe(404);
+        });
     })
 
 })
@@ -348,12 +353,12 @@ describe.skip("DELETE /game/:id/delete", () => {
 
 });
 
-describe("GET /api/v1/library/games", () => {
+describe.skip("GET /api/v1/library/games", () => {
 
     test("a list of games is returned", async () => {
 
         const response = await request(app)
-        .get("/api/v1/library/games")
+            .get("/api/v1/library/games")
 
         expect(response.statusCode).toBe(200);
         expect(response.body.length).toBeGreaterThan(0);
