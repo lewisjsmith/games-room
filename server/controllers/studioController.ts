@@ -101,14 +101,12 @@ export const deleteStudio = asyncHandler(async (req, res, next) => {
         res.status(400).json({errors: err.errors});
     }
 
-
-
 });
 
 export const getStudios = asyncHandler(async (req, res, next) => {
 
     const studios = await StudioModel.find({}).lean().exec();
-    res.json(studios);
+    res.status(200).json(studios);
 
 });
 

@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import GameForm from "../components/GameForm";
+import GameForm from "../components/Games/GameForm";
 
 export default function GameRoutes() {
     

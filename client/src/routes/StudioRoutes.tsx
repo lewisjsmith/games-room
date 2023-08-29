@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import StudioForm from "../components/StudioForm";
+import StudioForm from "../components/Studios/StudioForm";
 
 export default function StudioRoutes() {
     
