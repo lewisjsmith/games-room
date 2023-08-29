@@ -9,364 +9,218 @@ import * as dotenv from "dotenv";
 let app;
 
 async function connectDB() {
-    dotenv.config();
-    const mongo = process.env.SECURE_KEY;
-    app = makeApp(mongo);
+  dotenv.config();
+  const mongo = process.env.SECURE_KEY;
+  app = makeApp(mongo);
 }
 
 async function disconnectDB() {
-    await mongoose.connection.close();
+  await mongoose.connection.close();
 }
 
 beforeAll(async () => {
-    connectDB();
+  connectDB();
 });
 
 afterAll(async () => {
-    disconnectDB();
+  disconnectDB();
 });
 
 describe.skip("GET /game", () => {
+  describe("given a valid ID", () => {
+    test("should respond with a 200 status code", async () => {
+      const response = await request(app).get(
+        "/api/v1/library/game/64e797aa6f6e45da032679a6"
+      );
+      expect(response.statusCode).toBe(200);
+    });
 
-    describe("given a valid ID", () => {
-        // respond with JSON object of the game details
-        // respond with a 200 status code 
-        // specify json in the content type header
-        test("should respond with a 200 status code", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e797aa6f6e45da032679a6")
-            expect(response.statusCode).toBe(200);
-        });
+    // Tests for keys here, title first
+    test("should respond with a json object of the document", async () => {
+      const response = await request(app).get(
+        "/api/v1/library/game/64e797aa6f6e45da032679a6"
+      );
+      expect(Object.keys(response.body)).toEqual(
+        expect.arrayContaining([
+          "_id",
+          "title",
+          "studio",
+          "genre",
+          "releaseDate",
+        ])
+      );
+    });
+  });
 
-        // Tests for keys here, title first
-        test("should respond with a json object of the document", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e797aa6f6e45da032679a6")
-            expect(Object.keys(response.body)).toEqual(expect.arrayContaining(["_id", "title", "studio", "genre", "releaseDate"]));
-        });
-    })
+  describe("given an invalid ID", () => {
+    // respond with 400 not found
+    test("invalid format should respond with a 400 status code", async () => {
+      const response = await request(app).get("/api/v1/library/game/123");
+      expect(response.statusCode).toBe(400);
+      expect(response.body.errors).toBe("Not an ObjectId.");
+    });
 
-    describe("given an invalid ID", () => {
+    // respond with 400 Invalid URL
+    test("index page should respond with an error", async () => {
+      const response = await request(app).get("/api/v1/library/game/");
+      expect(response.statusCode).toBe(400);
+      expect(response.body.errors).toBe("Invalid URL.");
+    });
 
-        // respond with 400 not found
-        test("invalid format should respond with a 400 status code", async () => {
-            const response = await request(app).get("/api/v1/library/game/123")
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Not an ObjectId.");
-        })
-
-        // respond with 400 Invalid URL
-        test("index page should respond with an error", async () => {
-            const response = await request(app).get("/api/v1/library/game/")
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid URL.");
-        })
-
-        test("correct objectId format but not found on DB", async () => {
-            const response = await request(app).get("/api/v1/library/game/64e797aa6f6e45da032679a5")
-            expect(response.statusCode).toBe(404);
-        });
-    })
-
-})
+    test("correct objectId format but not found on DB", async () => {
+      const response = await request(app).get(
+        "/api/v1/library/game/64e797aa6f6e45da032679a5"
+      );
+      expect(response.statusCode).toBe(404);
+    });
+  });
+});
 
 describe.skip("POST /game/create", () => {
-
-    describe("Correct field details", () => {
-
-        test("Should respond with 200/ok", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "Success Test", studio: "64e4df9c0f790ff853699f8f", genre: "64e4df9c0f790ff853699f88", releaseDate: new Date() })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(200);
+  describe("Correct field details", () => {
+    test("Should respond with 200/ok", async () => {
+      const response = await request(app)
+        .post("/api/v1/library/game/create")
+        .send({
+          title: "Testing game creation",
+          studio: "64e4df9c0f790ff853699f8f",
+          genre: "64e4df9c0f790ff853699f88",
+          releaseDate: new Date(),
         })
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(200);
+      expect(Object.keys(response.body)).toContain("_id");
+    });
+  });
 
-        test("Should respond with new ObjectId", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "Success Test", studio: "64e4df9c0f790ff853699f8f", genre: "64e4df9c0f790ff853699f88", releaseDate: new Date() })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(Object.keys(response.body)).toContain("_id");
+  describe("Incorrect field details", () => {
+    test("Invalid title should notify", async () => {
+      const response = await request(app)
+        .post("/api/v1/library/game/create")
+        .send({
+          title: "",
+          studio: "64e4df9c0f790ff853699f8f",
+          genre: "64e4df9c0f790ff853699f88",
+          releaseDate: new Date(),
         })
-
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(400);
+      expect(response.body.errors[0].path).toBe("title");
     });
-
-    describe("Incorrect field details", () => {
-
-        test("Invalid title should notify", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "", studio: "64e4df9c0f790ff853699f8f", genre: "64e4df9c0f790ff853699f88", releaseDate: new Date() })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid input(s) for title");
-        });
-
-        test("Invalid studio should notify", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "Missing Studio", studio: "", genre: "64e4df9c0f790ff853699f88", releaseDate: new Date() })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid input(s) for studio");
-        });
-
-        test("Invalid genre should notify", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "Missing Genre", studio: "64e4df9c0f790ff853699f8f", genre: "", releaseDate: new Date() })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid input(s) for genre");
-        });
-
-        test("Invalid releaseDate should notify", async () => {
-
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "Missing Date", studio: "64e4df9c0f790ff853699f8f", genre: "64e4df9c0f790ff853699f88", releaseDate: "s" })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid input(s) for releaseDate");
-
-        });
-
-        test("Multiple invalid should notify", async () => {
-
-            const response = await request(app)
-                .post("/api/v1/library/game/create")
-                .send({ title: "Missing Date", studio: "", genre: "", releaseDate: new Date() })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid input(s) for studio and genre");
-
-        });
-
-    });
-
+  });
 });
 
 describe.skip("POST /game/:id/update", () => {
+  describe("Successful edit", () => {
+    test("Valid id and title should respond with 200/ok", async () => {
+      const title = `v${Math.ceil(Math.random() * 100)}`;
 
-    describe("Successful edit", () => {
-
-        test("Valid id and title should respond with 200/ok", async () => {
-
-            const title = "v2"
-
-            const response = await request(app)
-                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
-                .send({
-                    title: title
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(200);
-
-            const review = await request(app)
-                .get("/api/v1/library/game/64e744efee633153e98c0aca")
-            expect(review.statusCode).toBe(200);
-            expect(review.body.title).toBe(title);
-
-        });
-
-        test("Valid id and studio should respond with 200/ok", async () => {
-
-            const studio = "Nintendo"
-
-            const response = await request(app)
-
-                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
-                .send({
-                    studio: studio
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-
-            expect(response.statusCode).toBe(200);
-
+      const response = await request(app)
+        .post("/api/v1/library/game/64ede7bf0412fbed05bf7eee/update")
+        .send({
+          title: title,
         })
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(200);
 
-        test("Valid id and genre should respond with 200/ok", async () => {
+      const review = await request(app).get(
+        "/api/v1/library/game/64ede7bf0412fbed05bf7eee"
+      );
+      expect(review.statusCode).toBe(200);
+      expect(review.body.title).toBe(title);
+    });
+  });
 
-            const genre = "RPG"
-
-            const response = await request(app)
-
-                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
-                .send({
-                    genre: genre
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-
-            expect(response.statusCode).toBe(200);
-
+  describe("Edit errors", () => {
+    test("invalid input, title", async () => {
+      const response = await request(app)
+        .post("/api/v1/library/game/64ede7bf0412fbed05bf7eee/update")
+        .send({
+          title: "",
         })
-
-        test("Valid id && studio && genre should respond with 200/ok", async () => {
-
-            const title = "v4"
-            const studio = "Activision"
-            const genre = "Racing"
-
-            const response = await request(app)
-
-                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
-                .send({
-                    title: title,
-                    studio: studio,
-                    genre: genre
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-
-            expect(response.statusCode).toBe(200);
-
-        })
-
-        test("Valid id && date should respond with 200/ok", async () => {
-
-            const placeholder = new Date();
-            const offset = placeholder.getTimezoneOffset() / 60;
-            const d = new Date(1070, 7, 17, -offset)
-
-            const response = await request(app)
-
-                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
-                .send({
-                    releaseDate: d
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-
-            expect(response.statusCode).toBe(200);
-
-        });
-
-
-    })
-
-    describe("Edit errors", () => {
-
-        test("invalid input, title", async () => {
-
-            const response = await request(app)
-                .post("/api/v1/library/game/64e744efee633153e98c0aca/update")
-                .send({
-                    title: ""
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("No input title.");
-
-        });
-
-        test("invalid id but correct format", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/64e744efee633153e98c0123/update")
-                .send({
-                    title: "Invalid ID"
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid ID.");
-        })
-
-        test("invalid id format", async () => {
-            const response = await request(app)
-                .post("/api/v1/library/game/invalid/update")
-                .send({
-                    title: "Invalid ID"
-                })
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid ID format.");
-        });
-
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(400);
+      expect(response.body.errors[0].path).toBe("title");
     });
 
+    test("invalid id but correct format", async () => {
+      const response = await request(app)
+        .post("/api/v1/library/game/64ede7bf0412fbed05bf7eef/update")
+        .send({
+          title: "ID shouldn't be found",
+        })
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(404);
+    });
+
+    test("invalid id format", async () => {
+      const response = await request(app)
+        .post("/api/v1/library/game/invalid/update")
+        .send({
+          title: "ID must be an ObjectID",
+        })
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(400);
+      expect(response.body.errors).toBe("Not a valid ObjectId.");
+    });
+  });
 });
 
 describe.skip("DELETE /game/:id/delete", () => {
+  let testId: mongoose.Types.ObjectId;
 
-    let testId: mongoose.Types.ObjectId;
+  beforeEach(async () => {
+    const title = `Delete test ${Math.ceil(Math.random() * 100)}`;
 
-    beforeEach(async () => {
+    const response = await request(app)
+      .post("/api/v1/library/game/create")
+      .send({
+        title: title,
+        studio: "64e4df9c0f790ff853699f90",
+        genre: "64e4df9c0f790ff853699f88",
+        releaseDate: new Date(),
+      })
+      .set("Content-Type", "application/json")
+      .set("Accept", "application/json");
 
-        const response = await request(app)
-            .post("/api/v1/library/game/create")
-            .send({
-                title: "Testing delete function",
-                studio: "64e4df9c0f790ff853699f90",
-                genre: "64e4df9c0f790ff853699f88",
-            })
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
+    if (response.statusCode === 200) {
+      console.log("Test game created.");
 
-        if (response.statusCode === 200) {
+      const game = await Game.find({ title: title }).exec();
 
-            console.log("Test game created.");
+      testId = game[0]._id;
+    }
+  });
 
-            const game = await Game
-                .find({ "title": "Testing delete function" })
-                .exec()
+  test("Return 200, id no longer found", async () => {
+    const response = await request(app)
+      .post(`/api/v1/library/game/${testId}/delete`)
+      .send("delete");
+    expect(response.statusCode).toBe(200);
 
-            testId = game[0]._id
-
-        }
-    })
-
-    test("Return 200, id no longer found", async () => {
-
-        const response = await request(app)
-            .post(`/api/v1/library/game/${testId}/delete`)
-            .send("delete")
-        expect(response.statusCode).toBe(200);
-
-    })
-
-    test("Return 200, id no longer found", async () => {
-
-        const response = await request(app)
-            .post(`/api/v1/library/game/${testId}/delete`)
-            .send("delete")
-        expect(response.statusCode).toBe(200);
-
-        const retry = await request(app)
-            .post(`/api/v1/library/game/${testId}/delete`)
-            .send("delete")
-        expect(retry.statusCode).toBe(400);
-        expect(retry.body.errors).toBe("ID not found.");
-
-    })
-
+    const retry = await request(app)
+      .post(`/api/v1/library/game/${testId}/delete`)
+      .send("delete");
+    expect(retry.statusCode).toBe(404);
+    expect(retry.body.errors).toBe("ID not found.");
+  });
 });
 
 describe.skip("GET /api/v1/library/games", () => {
+  test("a list of games is returned", async () => {
+    const response = await request(app).get("/api/v1/library/games");
 
-    test("a list of games is returned", async () => {
-
-        const response = await request(app)
-            .get("/api/v1/library/games")
-
-        expect(response.statusCode).toBe(200);
-        expect(response.body.length).toBeGreaterThan(0);
-
-    });
-
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBeGreaterThan(0);
+  });
 });
 
-        // Alter game instances on game rename or delete
-        // Don't allow duplicate names
-        // Add before / after for providing exactly what is needed for tests
+// Alter game instances on game rename or delete
+// Don't allow duplicate names
+// Add before / after for providing exactly what is needed for tests

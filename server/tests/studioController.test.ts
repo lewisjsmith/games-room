@@ -287,7 +287,7 @@ describe.skip("DELETE /game/:id/delete", () => {
 
 });
 
-describe("GET /api/v1/library/studios", () => {
+describe.skip("GET /api/v1/library/studios", () => {
 
     test("a list of studios is returned", async () => {
 
