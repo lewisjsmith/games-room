@@ -135,17 +135,6 @@ describe.skip("POST /game/:id/update", () => {
   });
 
   describe("Edit errors", () => {
-    test("invalid input, title", async () => {
-      const response = await request(app)
-        .post("/api/v1/library/game/64ede7bf0412fbed05bf7eee/update")
-        .send({
-          title: "",
-        })
-        .set("Content-Type", "application/json")
-        .set("Accept", "application/json");
-      expect(response.statusCode).toBe(400);
-      expect(response.body.errors[0].path).toBe("title");
-    });
 
     test("invalid id but correct format", async () => {
       const response = await request(app)
@@ -169,6 +158,18 @@ describe.skip("POST /game/:id/update", () => {
       expect(response.statusCode).toBe(400);
       expect(response.body.errors).toBe("Not a valid ObjectId.");
     });
+
+    test("repeated titles", async () => {
+      const response = await request(app)
+        .post("/api/v1/library/game/64eccecdb5c60932e8f0a770/update")
+        .send({
+          title:"v4",
+        })
+        .set("Content-Type", "application/json")
+        .set("Accept", "application/json");
+      expect(response.statusCode).toBe(400);
+      expect(response.body.errors).toBe("Name in use.");
+    });
   });
 });
 
@@ -190,12 +191,26 @@ describe.skip("DELETE /game/:id/delete", () => {
       .set("Accept", "application/json");
 
     if (response.statusCode === 200) {
+
       console.log("Test game created.");
+      testId = response.body._id; 
 
-      const game = await Game.find({ title: title }).exec();
+      const instanceResponse = await request(app)
+      .post("/api/v1/library/gameinstance/create")
+      .send({
+        game: testId,
+        status: "Available",
+        due_back: new Date(),
+      })
+      .set("Content-Type", "application/json")
+      .set("Accept", "application/json");
 
-      testId = game[0]._id;
+      if (instanceResponse.statusCode === 200) {
+        console.log("Test gameInstance created.")
+      }
+
     }
+
   });
 
   test("Return 200, id no longer found", async () => {

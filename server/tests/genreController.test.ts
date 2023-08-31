@@ -35,11 +35,6 @@ describe.skip("GET /genre", () => {
         test("should respond with a 200 status code", async () => {
             const response = await request(app).get("/api/v1/library/genre/64e4df9c0f790ff853699f88")
             expect(response.statusCode).toBe(200);
-        });
-
-        // Tests for keys here, title first
-        test("should respond with a json object with the document", async () => {
-            const response = await request(app).get("/api/v1/library/genre/64e4df9c0f790ff853699f88")
             expect(Object.keys(response.body)).toEqual(expect.arrayContaining(["title"]));
         });
     })
@@ -61,7 +56,7 @@ describe.skip("GET /genre", () => {
         })
 
         test("should respond with a 404 not found", async () => {
-            const response = await request(app).get("/api/v1/library/genre/64e4df9c0f790ff853699f86")
+            const response = await request(app).get("/api/v1/library/genre/64e4df9c0f790ff853699f19")
             expect(response.statusCode).toBe(404);
         })
     })
@@ -75,7 +70,7 @@ describe.skip("POST /genre/create", () => {
         test("Should respond with 200/ok", async () => {
             const response = await request(app)
                 .post("/api/v1/library/genre/create")
-                .send({ title: "Genre success Test", founded: new Date() })
+                .send({ title: `Genre Success Test ${Math.ceil(Math.random()*100)}`})
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
             expect(response.statusCode).toBe(200);
@@ -88,18 +83,18 @@ describe.skip("POST /genre/create", () => {
         test("Invalid title should notify", async () => {
             const response = await request(app)
                 .post("/api/v1/library/genre/create")
-                .send({ title: ""})
+                .send({ title: "" })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
             expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid input(s) for title");
+            expect(response.body.errors[0].path).toBe("title");
         });
 
     });
 
 });
 
-describe.skip("POST /game/:id/update", () => {
+describe.skip("POST /genre/:id/update", () => {
 
     describe("Successful edit", () => {
 
@@ -108,7 +103,7 @@ describe.skip("POST /game/:id/update", () => {
             const title = `Title Random ${Math.ceil(Math.random()*100)}` 
 
             const response = await request(app)
-                .post("/api/v1/library/genre/64edc7a1f3984f2bf7513c50/update")
+                .post("/api/v1/library/genre/64efa351886f487ac9f6104a/update")
                 .send({
                     title: title
                 })
@@ -117,7 +112,7 @@ describe.skip("POST /game/:id/update", () => {
             expect(response.statusCode).toBe(200);
 
             const review = await request(app)
-                .get("/api/v1/library/genre/64edc7a1f3984f2bf7513c50")
+                .get("/api/v1/library/genre/64efa351886f487ac9f6104a")
             expect(review.statusCode).toBe(200);
             expect(review.body.title).toBe(title);
 
@@ -130,7 +125,7 @@ describe.skip("POST /game/:id/update", () => {
         test("invalid input, title", async () => {
 
             const response = await request(app)
-                .post("/api/v1/library/genre/64edc7a1f3984f2bf7513c50/update")
+                .post("/api/v1/library/genre/64efa351886f487ac9f6104a/update")
                 .send({
                     title: ""
                 })
@@ -138,20 +133,20 @@ describe.skip("POST /game/:id/update", () => {
                 .set('Accept', 'application/json')
 
             expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("No input title.");
+            expect(response.body.errors).toBe("No changes requested.");
 
         });
 
         test("invalid id but correct format", async () => {
             const response = await request(app)
-                .post("/api/v1/library/genre/64edc7a1f3984f2bf7513c51/update")
+                .post("/api/v1/library/genre/64eb7e040d1602d0a25fa2d4/update")
                 .send({
                     title: "Invalid ID"
                 })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
             expect(response.statusCode).toBe(404);
-            expect(response.body.errors).toBe("ID not found.");
+            expect(response.body.errors).toBe("Genre not found.");
         })
 
         test("invalid id format", async () => {
@@ -163,78 +158,79 @@ describe.skip("POST /game/:id/update", () => {
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
             expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid ID format.");
+            expect(response.body.errors).toBe("Not a valid ObjectId.");
         });
 
     });
 
 });
 
-// describe.skip("DELETE /game/:id/delete", () => {
+describe.skip("DELETE /genre/:id/delete", () => {
 
-//     let testId: mongoose.Types.ObjectId;
+    let testId: mongoose.Types.ObjectId;
 
-//     beforeEach(async () => {
+    beforeEach(async () => {
 
-//         const response = await request(app)
-//             .post("/api/v1/library/studio/create")
-//             .send({
-//                 title: "Testing delete function",
-//                 founded: new Date()
-//             })
-//             .set('Content-Type', 'application/json')
-//             .set('Accept', 'application/json')
+        const title = `Delete test ${Math.ceil(Math.random() * 100)}`;
 
-//         if (response.statusCode === 200) {
+        const response = await request(app)
+            .post("/api/v1/library/genre/create")
+            .send({
+                title: title,
+            })
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
 
-//             console.log("Test studio created.");
+        if (response.statusCode === 200) {
 
-//             const studio = await Studio
-//                 .find({ "title": "Testing delete function" })
-//                 .exec()
+            console.log("Test genre created.");
 
-//             testId = studio[0]._id
+            const genre = await Genre
+                .findOne({ "title": title })
+                .exec()
 
-//         }
-//     })
+            testId = genre._id
 
-//     test("Return 200, id no longer found", async () => {
+        }
+    })
 
-//         const response = await request(app)
-//             .post(`/api/v1/library/studio/${testId}/delete`)
-//             .send("delete")
-//         expect(response.statusCode).toBe(200);
+    test("Return 200, id no longer found", async () => {
 
-//     })
+        const response = await request(app)
+            .post(`/api/v1/library/genre/${testId}/delete`)
+            .send("delete")
+        expect(response.statusCode).toBe(200);
 
-//     test("Return 200, id no longer found", async () => {
+    })
 
-//         const response = await request(app)
-//             .post(`/api/v1/library/studio/${testId}/delete`)
-//             .send("delete")
-//         expect(response.statusCode).toBe(200);
+    test("Return 200, id no longer found", async () => {
 
-//         const retry = await request(app)
-//             .post(`/api/v1/library/studio/${testId}/delete`)
-//             .send("delete")
-//         expect(retry.statusCode).toBe(400);
-//         expect(retry.body.errors).toBe("ID not found.");
+        const response = await request(app)
+            .post(`/api/v1/library/genre/${testId}/delete`)
+            .send("delete")
+        expect(response.statusCode).toBe(200);
 
-//     })
+        const retry = await request(app)
+            .post(`/api/v1/library/genre/${testId}/delete`)
+            .send("delete")
+        expect(retry.statusCode).toBe(400);
+        expect(retry.body.errors).toBe("ID not found.");
 
-// });
+    })
 
-// describe("GET /api/v1/library/studios", () => {
+});
 
-//     test("a list of studios is returned", async () => {
+describe.skip("GET /api/v1/library/genres", () => {
 
-//         const response = await request(app)
-//         .get("/api/v1/library/studios")
+    test("a list of studios is returned", async () => {
 
-//         expect(response.statusCode).toBe(200);
-//         expect(response.body.length).toBeGreaterThan(0);
+        const response = await request(app)
+        .get("/api/v1/library/genres")
 
-//     });
+        expect(response.statusCode).toBe(200);
+        expect(response.body.length).toBeGreaterThan(0);
 
-// });
+    });
+
+});
 

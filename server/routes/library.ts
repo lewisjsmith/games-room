@@ -2,7 +2,8 @@ import express from "express";
 
 import {getGameById, createGame, gameIndex, updateGame, deleteGame, getGamesList} from "../controllers/gameController";
 import {getStudioById, getStudios, studioIndex, createStudio, updateStudio, deleteStudio} from "../controllers/studioController";
-import {getGenres, getGenreById, genreIndex, createGenre, updateGenre} from "../controllers/genreController";
+import {getGenres, getGenreById, genreIndex, createGenre, updateGenre, deleteGenre} from "../controllers/genreController";
+import {getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameInstance, deleteGameInstance, getGameInstancesList} from "../controllers/gameInstanceController";
 
 export const router = express.Router();
 
@@ -23,17 +24,13 @@ router.get("/studio/", studioIndex);
 router.post("/genre/create", createGenre);
 router.get("/genre/:id", getGenreById);
 router.post("/genre/:id/update", updateGenre);
-router.post("/genre/:id/delete", () => {});
+router.post("/genre/:id/delete", deleteGenre);
 router.get("/genres", getGenres);
 router.get("/genre/", genreIndex)
 
-router.post("/gameinstance/create", () => {});
-router.get("/gameinstance/:id", () => {});
-router.post("/gameinstance/:id/update", () => {});
-router.post("/gameinstance/:id/delete", () => {});
-
-router.post("/console/create", () => {});
-router.get("/console/:id", () => {});
-router.post("/console/:id/update", () => {});
-router.post("/console/:id/delete", () => {});
-router.get("/consoles", () => {});
+router.post("/gameinstance/create", createGameInstance);
+router.get("/gameinstance/:id", getGameInstanceById);
+router.post("/gameinstance/:id/update", updateGameInstance);
+router.post("/gameinstance/:id/delete", deleteGameInstance);
+router.get("/gameinstance/", gameInstanceIndex);
+router.get("/gameinstances/", getGameInstancesList)

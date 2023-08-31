@@ -1,112 +1,151 @@
 import asyncHandler from "express-async-handler";
+import { body, validationResult } from "express-validator";
 import StudioModel from "../models/studio";
 import mongoose from "mongoose";
 
 export const studioIndex = asyncHandler(async (req, res, next) => {
-    res.status(400).json({ errors: "Invalid URL." });
-})
+  res.status(400).json({ errors: "Invalid URL." });
+});
 
 export const getStudioById = asyncHandler(async (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).json({ errors: "Not a valid ObjectId." });
+  }
 
-    if (!mongoose.isValidObjectId(req.params.id)) {
-        res.status(400).json({ errors: "Not a valid ObjectId." })
+  try {
+    const studio = await StudioModel.findOne({ _id: req.params.id })
+      .select({ __v: 0 })
+      .lean()
+      .exec();
+
+    if (studio) {
+      res.status(200).json(studio);
+    } else {
+      res.status(404).json({ errors: "Studio not found." });
     }
-
-    try {
-        const studio = await StudioModel
-            .find({ _id: req.params.id })
-            .select({ "__v": 0 }).lean().exec();
-
-        if (studio.length > 0) {
-            res.status(200).json(studio[0]);
-        } else {
-            res.status(404).json({ errors: "Studio not found." })
-        }
-
-    }
-    catch (err) {
-        res.status(400).json({ errors: "Invalid URL." });
-    }
-
+  } catch (err) {
+    res.status(400).json({ errors: "Invalid URL." });
+  }
 });
 
-export const createStudio = asyncHandler(async (req, res, next) => {
+export const createStudio = [
+  body("title", "Studio title must contain at least 1 character")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
 
-    const details = { "title": req.body.title, "founded": req.body.founded };
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
 
-    const studio = new StudioModel(details)
+    const details = {
+      title: req.body.title,
+      founded: req.body.founded,
+    };
 
-    try {
-        const response = await studio.save();
-        res.status(200).json(response);
-    } catch (err) {
-        const keys = Object.keys(err.errors);
-        const errorFields = keys.join(" and ");
-        const errorBody = { errors: `Invalid input(s) for ${errorFields}` };
-        res.status(400).json(errorBody);
+    const studio = new StudioModel(details);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({ ...details, errors: errors.array() });
+      return;
+    } else {
+      const studioExists = await StudioModel.findOne({
+        title: req.body.title,
+      }).exec();
+
+      if (studioExists) {
+        res.status(302).json({
+          _id: studioExists._id.toHexString(),
+          ...details,
+        });
+      } else {
+        await studio.save();
+        res.status(200).json({ _id: studio._id.toHexString(), ...details });
+      }
     }
+  }),
+];
 
-
-
-});
-
-// WIP
 export const updateStudio = asyncHandler(async (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).json({ errors: "Not a valid ObjectId." });
+  }
 
-    if (!mongoose.isValidObjectId(req.params.id)) {
-        res.status(400).json({ errors: "Invalid ID format." });
+  let details = {};
+
+  if (req.body.title) {
+    if (req.body.title.trim() !== "") {
+      details["title"] = req.body.title;
+    }
+  }
+
+  if (req.body.founded) {
+    details["founded"] = req.body.founded;
+  }
+
+  if (Object.keys(details).length > 0) {
+    let studioExists;
+
+    if (req.body.title) {
+      studioExists = await StudioModel.findOne({
+        title: req.body.title.trim(),
+      });
     }
 
-    const body = req.body;
+    const studio = await StudioModel.findOne({
+      _id: req.params.id,
+    });
 
-    const errors = [];
-
-    if (Object.keys(body).length === 0) {
-        res.status(400).json({ errors: "No updates requested." });
-    }
-
-    if (Object.keys(body).includes("title") && body.title?.trim() === "") {
-        res.status(400).json({ errors: "No input title." });
-    }
-
-    try {
-        const response = await StudioModel
-            .findOneAndUpdate({ "_id": req.params.id }, body);
-
-
-        if (response === null) {
-            res.status(404).json({ errors: "ID not found." })
+    if (studioExists) {
+      if (studio) {
+        if (studio._id.toHexString() !== studioExists._id.toHexString()) {
+          res.status(400).json({ ...studioExists, errors: "Name in use." });
+          return;
         } else {
-            res.status(200).json({ "_id": req.params.id });
+          for (const key in details) {
+            studio[key] = details[key];
+            studio.markModified(key);
+          }
+          await studio.save();
+          res.status(200).json({ ...studio });
         }
-
-    } catch (err) {
-        res.status(400).json({ errors: err.errors });
+      } else {
+        res.status(404).json({ ...details, errors: "Studio not found." });
+        return;
+      }
+    } else {
+      if (studio) {
+        for (const key in details) {
+          studio[key] = details[key];
+          studio.markModified(key);
+        }
+        await studio.save();
+        res.status(200).json({ ...studio });
+      } else {
+        res.status(404).json({ ...details, errors: "Studio not found." });
+        return;
+      }
     }
-
+  } else {
+    res.status(400).json({ errors: "No changes requested." });
+    return;
+  }
 });
 
 export const deleteStudio = asyncHandler(async (req, res, next) => {
+  try {
+    const response = await StudioModel.findOneAndRemove({ _id: req.params.id });
 
-    try {
-        const response = await StudioModel
-            .findOneAndRemove({ "_id": req.params.id })
-
-        if (response) {
-            res.status(200).send("deleted");
-        } else {
-            res.status(400).json({ errors: "ID not found." });
-        }
-    } catch (err) {
-        res.status(400).json({errors: err.errors});
+    if (response) {
+      res.status(200).send("deleted");
+    } else {
+      res.status(400).json({ errors: "ID not found." });
     }
-
+  } catch (err) {
+    res.status(400).json({ errors: err.errors });
+  }
 });
 
 export const getStudios = asyncHandler(async (req, res, next) => {
-
-    const studios = await StudioModel.find({}).lean().exec();
-    res.status(200).json(studios);
-
+  const studios = await StudioModel.find({}).lean().exec();
+  res.status(200).json(studios);
 });
-

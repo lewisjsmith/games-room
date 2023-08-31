@@ -1,6 +1,5 @@
 import GameModel from "../models/game";
-import StudioModel from "../models/studio";
-import GenreModel from "../models/genre";
+import GameInstanceModel from "../models/gameInstance";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import mongoose from "mongoose";
@@ -41,7 +40,6 @@ export const createGame = [
     .escape(),
 
   asyncHandler(async (req, res, next) => {
-
     const errors = validationResult(req);
 
     const details = {
@@ -74,164 +72,66 @@ export const createGame = [
   }),
 ];
 
-export const updateGame = [
-  body("title", "Game title must contain at least 1 character")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-
-  asyncHandler(async (req, res, next) => {
-    if (!mongoose.isValidObjectId(req.params.id)) {
-      res.status(400).json({ errors: "Not a valid ObjectId." });
-    }
-
-    const errors = validationResult(req);
-
-    const details = {
-      title: req.body.title,
-      studio: req.body.studio,
-      genre: req.body.genre,
-      releaseDate: req.body.releaseDate,
-    };
-
-    if (!errors.isEmpty()) {
-      res.status(400).json({ ...details, errors: errors.array() });
-      return;
-    } else {
-      const gameExists = await GameModel.findOne({
-        title: req.body.title,
-      }).exec();
-
-      if (gameExists) {
-        res.status(302).json({
-          _id: gameExists._id.toHexString(),
-          ...details,
-        });
-      } else {
-        const game = await GameModel.findOneAndUpdate(
-          { _id: req.params.id },
-          details
-        );
-
-        if (game) {
-          res.status(200).json({ title: details.title, ...game });
-        } else {
-          res.status(404).json({ ...details });
-        }
-      }
-    }
-  }),
-];
-
-export const updateGameOld = asyncHandler(async (req, res, next) => {
+export const updateGame = asyncHandler(async (req, res, next) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).json({ errors: "Invalid ID format." });
+    res.status(400).json({ errors: "Not a valid ObjectId." });
   }
 
-  const body: UpdateBody = req.body;
+  let details: GameBody = {};
 
-  if (Object.keys(body).length === 0) {
-    res.status(400).json({ errors: "No updates requested." });
-  }
-
-  if (Object.keys(body).includes("title") && body.title?.trim() === "") {
-    res.status(400).json({ errors: "No input title." });
-  }
-
-  async function getStudioId() {
-    const response = await StudioModel.find({ title: body.studio })
-      .select({ _id: 1 })
-      .lean()
-      .exec();
-
-    return response[0]["_id"];
-  }
-
-  async function getGenreId() {
-    const response = await GenreModel.find({ title: body.genre })
-      .select({ _id: 1 })
-      .lean()
-      .exec();
-
-    return response[0]["_id"];
-  }
-
-  if (
-    Object.keys(body).includes("studio") &&
-    !Object.keys(body).includes("genre")
-  ) {
-    const studio = await getStudioId();
-    body.studio = studio;
-
-    try {
-      const response = await GameModel.findOneAndUpdate(
-        { _id: req.params.id },
-        body
-      );
-      res.status(200).json({ _id: req.params.id });
-    } catch (err) {
-      res.status(400).json(err);
+  if (req.body.title) {
+    if (req.body.title.trim() !== "") {
+      details["title"] = req.body.title;
     }
   }
-
-  if (
-    !Object.keys(body).includes("studio") &&
-    Object.keys(body).includes("genre")
-  ) {
-    const genre = await getGenreId();
-    body.genre = genre;
-
-    try {
-      const response = await GameModel.findOneAndUpdate(
-        { _id: req.params.id },
-        body
-      );
-      res.status(200).json({ _id: req.params.id });
-    } catch (err) {
-      res.status(400).json(err);
-    }
+  if (req.body.studio) {
+    details["studio"] = req.body.studio;
+  }
+  if (req.body.genre) {
+    details["genre"] = req.body.genre;
+  }
+  if (req.body.releaseDate) {
+    details["releaseDate"] = req.body.releaseDate;
   }
 
-  if (
-    Object.keys(body).includes("studio") &&
-    Object.keys(body).includes("genre")
-  ) {
-    const studio = await getStudioId();
-    const genre = await getGenreId();
-
-    Promise.all([studio, genre]).then(async (values) => {
-      body.studio = values[0];
-      body.genre = values[1];
-
-      try {
-        const response = await GameModel.findOneAndUpdate(
-          { _id: req.params.id },
-          body
-        );
-        res.status(200).json({ _id: req.params.id });
-      } catch (err) {
-        res.status(400).json(err);
-      }
+  if (Object.keys(details).length > 0) {
+    const gameExists = await GameModel.findOne({
+      title: req.body.title.trim(),
     });
-  }
 
-  if (
-    !Object.keys(body).includes("studio") &&
-    !Object.keys(body).includes("genre")
-  ) {
-    try {
-      const response = await GameModel.findOneAndUpdate(
-        { _id: req.params.id },
-        body
-      );
-      if (response) {
-        res.status(200).json({ _id: req.params.id });
+    const game = await GameModel.findOne({
+      _id: req.params.id,
+    });
+
+    if (gameExists) {
+      if (game) {
+        if (game._id.toHexString() !== gameExists._id.toHexString()) {
+          res.status(400).json({ ...gameExists, errors: "Name in use." });
+        } else {
+          for (const key in details) {
+            game[key] = details[key];
+            game.markModified(key);
+          }
+          await game.save();
+          res.status(200).json({ ...game });
+        }
       } else {
-        res.status(400).json({ errors: "Invalid ID." });
+        res.status(404).json({ ...details, errors: "Game not found." });
       }
-    } catch (err) {
-      res.status(400).json(err);
+    } else {
+      if (game) {
+        for (const key in details) {
+          game[key] = details[key];
+          game.markModified(key);
+        }
+        await game.save();
+        res.status(200).json({ ...game });
+      } else {
+        res.status(404).json({ ...details, errors: "Game not found." });
+      }
     }
+  } else {
+    res.status(400).json({ errors: "No changes requested." });
   }
 });
 
@@ -239,6 +139,15 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
 
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(400).json({ errors: "Not an ObjectId." });
+  }
+
+  try {
+    const instances = await GameInstanceModel.find({game: req.params.id});
+    if(instances.length > 0) {
+      res.status(400).json({errors: "Game can't be deleted whilst it has Game Instances."});
+    }
+  } catch (err) {
+    console.log(err)
   }
 
   try {
@@ -269,13 +178,6 @@ export const getGamesList = asyncHandler(async (req, res, next) => {
 });
 
 interface GameBody {
-  title: string;
-  studio: mongoose.Types.ObjectId;
-  genre: mongoose.Types.ObjectId;
-  releaseDate: Date;
-}
-
-interface UpdateBody {
   title?: string;
   studio?: mongoose.Types.ObjectId;
   genre?: mongoose.Types.ObjectId;
