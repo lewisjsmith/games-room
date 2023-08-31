@@ -170,29 +170,41 @@ describe.skip("DELETE /genre/:id/delete", () => {
     let testId: mongoose.Types.ObjectId;
 
     beforeEach(async () => {
-
         const title = `Delete test ${Math.ceil(Math.random() * 100)}`;
-
+    
         const response = await request(app)
-            .post("/api/v1/library/genre/create")
-            .send({
-                title: title,
-            })
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json')
-
+          .post("/api/v1/library/genre/create")
+          .send({
+            title: title,
+          })
+          .set("Content-Type", "application/json")
+          .set("Accept", "application/json");
+    
         if (response.statusCode === 200) {
+    
+          console.log("Test genre created.");
+          testId = response.body._id; 
+    
+          const gameResponse = await request(app)
+          .post("/api/v1/library/game/create")
+          .send({
+            title: title,
+            studio: "64e4df9c0f790ff853699f90",
+            genre: testId,
+            releaseDate: new Date()
+          })
+          .set("Content-Type", "application/json")
+          .set("Accept", "application/json");
 
-            console.log("Test genre created.");
-
-            const genre = await Genre
-                .findOne({ "title": title })
-                .exec()
-
-            testId = genre._id
-
+          console.log(gameResponse.statusCode);
+    
+          if (gameResponse.statusCode === 200) {
+            console.log("Test game created.")
+          }
+    
         }
-    })
+    
+      });
 
     test("Return 200, id no longer found", async () => {
 

@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
+import GameModel from "../models/game";
 import GenreModel from "../models/genre";
 import mongoose from "mongoose";
 
@@ -127,6 +128,16 @@ export const updateGenre = asyncHandler(async (req, res, next) => {
 });
 
 export const deleteGenre = asyncHandler(async (req, res, next) => {
+
+  try {
+    const instances = await GameModel.find({genre: req.params.id});
+    if(instances.length > 0) {
+      res.status(400).json({errors: "Genre can't be deleted whilst it has Game Instances."});
+    }
+  } catch (err) {
+    console.log(err)
+  }
+
   try {
     const response = await GenreModel.findOneAndRemove({ _id: req.params.id });
 

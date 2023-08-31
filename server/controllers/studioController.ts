@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
+import GameModel from "../models/game";
 import StudioModel from "../models/studio";
 import mongoose from "mongoose";
 
@@ -132,6 +133,16 @@ export const updateStudio = asyncHandler(async (req, res, next) => {
 });
 
 export const deleteStudio = asyncHandler(async (req, res, next) => {
+
+  try {
+    const instances = await GameModel.find({studio: req.params.id});
+    if(instances.length > 0) {
+      res.status(400).json({errors: "Studio can't be deleted whilst it has Games registered to it."});
+    }
+  } catch (err) {
+    console.log(err)
+  }
+
   try {
     const response = await StudioModel.findOneAndRemove({ _id: req.params.id });
 
