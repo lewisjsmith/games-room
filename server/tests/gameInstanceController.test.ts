@@ -55,12 +55,12 @@ describe.skip("GET /gameInstance/:id", () => {
   });
 });
 
-describe.skip("POST /gameInstance/create", () => {
+describe("POST /gameInstance/create", () => {
   test("successful creation using existing game", async () => {
     const response1 = await request(app)
       .post("/api/v1/library/gameinstance/create")
       .send({
-        game: "64f324e2c8bbe3fede0a5bb1",
+        game: "64f3289e2bc58869b9da549c",
         status: "Available",
         due_back: new Date(),
       })
@@ -71,7 +71,7 @@ describe.skip("POST /gameInstance/create", () => {
     const response2 = await request(app)
       .post("/api/v1/library/gameinstance/create")
       .send({
-        game: "64f324e2c8bbe3fede0a5bb1",
+        game: "64f3289e2bc58869b9da549c",
         status: "Loaned",
         due_back: new Date(),
       })
@@ -82,7 +82,7 @@ describe.skip("POST /gameInstance/create", () => {
     const response3 = await request(app)
       .post("/api/v1/library/gameinstance/create")
       .send({
-        game: "64f324e2c8bbe3fede0a5bb1",
+        game: "64f3289e2bc58869b9da549c",
         status: "Lost",
         due_back: new Date(),
       })

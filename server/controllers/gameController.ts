@@ -139,12 +139,14 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
 
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(400).json({ errors: "Not an ObjectId." });
+    return;
   }
 
   try {
     const instances = await GameInstanceModel.find({game: req.params.id});
     if(instances.length > 0) {
       res.status(400).json({errors: "Game can't be deleted whilst it has Game Instances."});
+      return;
     }
   } catch (err) {
     console.log(err)
@@ -157,9 +159,11 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
       res.status(200).send("deleted");
     } else {
       res.status(404).json({ errors: "ID not found." });
+      return;
     }
   } catch (err) {
     res.status(400).json({ errors: err });
+    return;
   }
 });
 

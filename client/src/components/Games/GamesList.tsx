@@ -14,16 +14,22 @@ export default function GamesList() {
   }, []);
 
   return (
-    <ul>
-      {gamesList.map((game) => {
-        return (
-          <li key={game._id}>
-            <Link to={`/game/${game._id}`}>
-              <button>{game.title}</button>
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+
+      {gamesList.length > 0 && <ul>
+        {gamesList.map((game) => {
+          return (
+            <li key={game._id}>
+              <Link to={`/game/${game._id}`}>
+                <button>{game.title}</button>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>}
+
+      {gamesList.length === 0 && <h2>No games found.</h2>}
+
+    </div>
   );
 }

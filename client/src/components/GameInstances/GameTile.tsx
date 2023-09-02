@@ -8,15 +8,11 @@ export default function GameInstanceTile(props) {
       <table>
         <thead>
           <tr>
-            <td>Game: </td>
-            <td>{game ? game : "Null"}</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
             <td>Status: </td>
             <td>{status ? status : "Null"}</td>
           </tr>
+        </thead>
+        <tbody>
           <tr>
             <td>Due: </td>
             <td>{due_back ? due_back : "Null"}</td>
