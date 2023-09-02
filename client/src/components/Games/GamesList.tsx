@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import GameTile from "./GameTile";
 
 export default function GamesList() {
@@ -17,7 +18,9 @@ export default function GamesList() {
       {gamesList.map((game) => {
         return (
           <li key={game._id}>
-            <GameTile details={game} />
+            <Link to={`/game/${game._id}`}>
+              <button>{game.title}</button>
+            </Link>
           </li>
         );
       })}

@@ -42,10 +42,6 @@ function GameForm() {
     }, [])
 
     useEffect(() => {
-        setFormDate(presentDate());
-    }, []);
-
-    useEffect(() => {
 
         setFormBody({
             title: formTitle,
@@ -98,11 +94,6 @@ function GameForm() {
 
     }
 
-    function presentDate() {
-        const present = new Date().toLocaleDateString().split("/");
-        return `${present[2]}-${present[1]}-${present[0]}`;
-    }
-
     return (
 
         <div>
@@ -123,7 +114,7 @@ function GameForm() {
                     })}
                 </select>
 
-                <input type="date" name="releaseDate" value={formDate} min="1950-01-01" max={presentDate()} onChange={handleDateChange} />
+                <input type="date" name="releaseDate" value={formDate} min="1950-01-01" onChange={handleDateChange} />
 
                 <button type="submit">Submit</button>
 

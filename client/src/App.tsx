@@ -7,6 +7,8 @@ import GameTile from "./components/Games/GameTile";
 import GamesList from "./components/Games/GamesList";
 import StudioRoutes from "./routes/StudioRoutes";
 import StudioForm from "./components/Studios/StudioForm";
+import StudiosList from "./components/Studios/StudiosList";
+import GenreList from "./components/Genres/GenreList";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/game/*" element={<GameRoutes />} />
           <Route path="/games" element={<GamesList />} />
           <Route path="/studio/*" element={<StudioRoutes />} />
+          <Route path="/studios" element={<StudiosList />} />
+          <Route path="/genres" element={<GenreList />} />
         </Routes>
       </div>
     </div>
