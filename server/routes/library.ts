@@ -3,7 +3,7 @@ import express from "express";
 import {getGameById, createGame, gameIndex, updateGame, deleteGame, getGamesList} from "../controllers/gameController";
 import {getStudioById, getStudios, studioIndex, createStudio, updateStudio, deleteStudio} from "../controllers/studioController";
 import {getGenres, getGenreById, genreIndex, createGenre, updateGenre, deleteGenre} from "../controllers/genreController";
-import {getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameInstance, deleteGameInstance, getGameInstancesList} from "../controllers/gameInstanceController";
+import {getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameInstance, deleteGameInstance, getGameInstancesList, getGameInstancesByGameId} from "../controllers/gameInstanceController";
 
 export const router = express.Router();
 
@@ -34,3 +34,4 @@ router.post("/gameinstance/:id/update", updateGameInstance);
 router.post("/gameinstance/:id/delete", deleteGameInstance);
 router.get("/gameinstance/", gameInstanceIndex);
 router.get("/gameinstances/", getGameInstancesList)
+router.get("/gameinstances/:id", getGameInstancesByGameId)

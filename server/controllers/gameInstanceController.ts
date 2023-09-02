@@ -96,7 +96,9 @@ export const deleteGameInstance = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    const response = await GameInstanceModel.findOneAndRemove({ _id: req.params.id });
+    const response = await GameInstanceModel.findOneAndRemove({
+      _id: req.params.id,
+    });
 
     if (response) {
       res.status(200).send("deleted");
@@ -106,12 +108,30 @@ export const deleteGameInstance = asyncHandler(async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ errors: err });
   }
-
 });
 
 export const getGameInstancesList = asyncHandler(async (req, res, next) => {
   try {
     const response = await GameInstanceModel.find({}).lean().exec();
+
+    if (response) {
+      res.status(200).json(response);
+    } else {
+      res.status(400).json({ errors: "GameInstances list not found." });
+    }
+  } catch (err) {
+    res.status(400).json({ errors: err });
+  }
+});
+
+export const getGameInstancesByGameId = asyncHandler(async (req, res, next) => {
+
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).json({ errors: "Not a valid ObjectId." });
+  }
+
+  try {
+    const response = await GameInstanceModel.find({game: req.params.id}).lean().exec();
 
     if (response) {
       res.status(200).json(response);
