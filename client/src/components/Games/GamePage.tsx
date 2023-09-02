@@ -8,6 +8,7 @@ export default function GamePage() {
   const location = useLocation();
   const [gameId, setGameId] = useState("");
   const [details, setDetails] = useState({});
+  const [gameInstanceList, setGameInstanceList] = useState([]);
 
   useEffect(() => {
     setGameId(location.pathname.split("/")[2]);
@@ -21,6 +22,18 @@ export default function GamePage() {
         })
         .then((data) => {
           setDetails(data);
+        });
+    }
+  }, [gameId]);
+
+  useEffect(() => {
+    if (gameId !== "") {
+      fetch(`/api/v1/library/gameinstances/${gameId}`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setGameInstanceList(data);
         });
     }
   }, [gameId]);
@@ -44,20 +57,31 @@ export default function GamePage() {
 
   return (
     <div>
-
       <div>
+        <h2 className="font-bold">Game Details</h2>
         <GameTile details={details} />
         <button
           onClick={() => deleteGame()}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
           Delete
         </button>
       </div>
-{/* 
-      <div>
-        <GameInstanceTile details={{game: "Game", status: "Status", due_back: "Due back" }}/>
-      </div> */}
 
+      <div>
+        <h2 className="font-bold">Game Instances</h2>
+        <ul>
+          {gameInstanceList.map((gi) => {
+            return (
+              <li key={gi._id}>
+                <GameInstanceTile
+                  details={gi}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
