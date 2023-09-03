@@ -138,6 +138,7 @@ export const deleteStudio = asyncHandler(async (req, res, next) => {
     const instances = await GameModel.find({studio: req.params.id});
     if(instances.length > 0) {
       res.status(400).json({errors: "Studio can't be deleted whilst it has Games registered to it."});
+      return;
     }
   } catch (err) {
     console.log(err)
@@ -150,9 +151,11 @@ export const deleteStudio = asyncHandler(async (req, res, next) => {
       res.status(200).send("deleted");
     } else {
       res.status(400).json({ errors: "ID not found." });
+      return;
     }
   } catch (err) {
     res.status(400).json({ errors: err.errors });
+    return;
   }
 });
 

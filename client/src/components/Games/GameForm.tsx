@@ -25,6 +25,14 @@ function GameForm() {
                 }
                 setStudios({ ...map });
                 setFetchStudio(true);
+                try {
+                    const keys = Object.keys(map);
+                    if(keys.length > 0) {
+                        setFormStudio(map[keys[0]]);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
             });
     }, [])
 
@@ -38,6 +46,14 @@ function GameForm() {
                 }
                 setGenres({ ...map });
                 setFetchGenres(true);
+                try {
+                    const keys = Object.keys(map);
+                    if(keys.length > 0) {
+                        setFormGenre(map[keys[0]]);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
             });
     }, [])
 

@@ -133,6 +133,7 @@ export const deleteGenre = asyncHandler(async (req, res, next) => {
     const instances = await GameModel.find({genre: req.params.id});
     if(instances.length > 0) {
       res.status(400).json({errors: "Genre can't be deleted whilst it has Game Instances."});
+      return;
     }
   } catch (err) {
     console.log(err)
@@ -145,9 +146,11 @@ export const deleteGenre = asyncHandler(async (req, res, next) => {
       res.status(200).send("deleted");
     } else {
       res.status(400).json({ errors: "ID not found." });
+      return;
     }
   } catch (err) {
     res.status(400).json({ errors: err.errors });
+    return;
   }
 });
 

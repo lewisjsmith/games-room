@@ -181,6 +181,44 @@ export const getGamesList = asyncHandler(async (req, res, next) => {
   }
 });
 
+export const getGamesByStudioId = asyncHandler(async (req, res, next) => {
+
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).json({ errors: "Not a valid ObjectId." });
+  }
+
+  try {
+    const response = await GameModel.find({studio: req.params.id}).lean().exec();
+
+    if (response) {
+      res.status(200).json(response);
+    } else {
+      res.status(400).json({ errors: "Games list not found." });
+    }
+  } catch (err) {
+    res.status(400).json({ errors: err });
+  }
+});
+
+export const getGamesByGenreId = asyncHandler(async (req, res, next) => {
+
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(400).json({ errors: "Not a valid ObjectId." });
+  }
+
+  try {
+    const response = await GameModel.find({genre: req.params.id}).lean().exec();
+
+    if (response) {
+      res.status(200).json(response);
+    } else {
+      res.status(400).json({ errors: "Games list not found." });
+    }
+  } catch (err) {
+    res.status(400).json({ errors: err });
+  }
+});
+
 interface GameBody {
   title?: string;
   studio?: mongoose.Types.ObjectId;

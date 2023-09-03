@@ -9,6 +9,7 @@ import StudioRoutes from "./routes/StudioRoutes";
 import StudioForm from "./components/Studios/StudioForm";
 import StudiosList from "./components/Studios/StudiosList";
 import GenreList from "./components/Genres/GenreList";
+import GenreRoutes from "./routes/GenreRoutes";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/games" element={<GamesList />} />
           <Route path="/studio/*" element={<StudioRoutes />} />
           <Route path="/studios" element={<StudiosList />} />
+          <Route path="/genre/*" element={<GenreRoutes />} />
           <Route path="/genres" element={<GenreList />} />
         </Routes>
       </div>

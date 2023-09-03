@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import GenreTile from "./GenreTile";
 
 export default function GenreList() {
@@ -13,10 +14,21 @@ export default function GenreList() {
   }, []);
 
   return (
-    <ul>
-      {genreList.map((genre) => {
-        return <li key={genre._id}><GenreTile details={genre}/></li>;
-      })}
-    </ul>
+    <div>
+      {genreList.length > 0 && <ul>
+        {genreList.map((genre) => {
+          return (
+            <li key={genre._id}>
+              <Link to={`/genre/${genre._id}`}>
+                <button>{genre.title}</button>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>}
+
+      {genreList.length === 0 && <h2>No genres found.</h2>}
+
+    </div>
   );
 }

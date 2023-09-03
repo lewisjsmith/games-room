@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import StudioTile from "./StudioTile";
 
 export default function GamesList() {
@@ -13,14 +14,21 @@ export default function GamesList() {
   }, []);
 
   return (
-    <ul>
-      {studiosList.map((studio) => {
-        return (
-          <li key={studio._id}>
-            <StudioTile details={studio} />
-          </li>
-        );
-      })}
-    </ul>
+    <div>
+      {studiosList.length > 0 && <ul>
+        {studiosList.map((studio) => {
+          return (
+            <li key={studio._id}>
+              <Link to={`/studio/${studio._id}`}>
+                <button>{studio.title}</button>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>}
+
+      {studiosList.length === 0 && <h2>No studios found.</h2>}
+
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import GameTile from "./GameTile";
 
 export default function GamesList() {
   const [gamesList, setGamesList] = useState([]);

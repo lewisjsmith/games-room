@@ -1,6 +1,6 @@
 import express from "express";
 
-import {getGameById, createGame, gameIndex, updateGame, deleteGame, getGamesList} from "../controllers/gameController";
+import {getGameById, createGame, gameIndex, updateGame, deleteGame, getGamesList, getGamesByStudioId, getGamesByGenreId} from "../controllers/gameController";
 import {getStudioById, getStudios, studioIndex, createStudio, updateStudio, deleteStudio} from "../controllers/studioController";
 import {getGenres, getGenreById, genreIndex, createGenre, updateGenre, deleteGenre} from "../controllers/genreController";
 import {getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameInstance, deleteGameInstance, getGameInstancesList, getGameInstancesByGameId} from "../controllers/gameInstanceController";
@@ -13,6 +13,8 @@ router.post("/game/:id/update", updateGame);
 router.post("/game/:id/delete", deleteGame);
 router.get("/games", getGamesList);
 router.get("/game/", gameIndex);
+router.get("/games/studio/:id", getGamesByStudioId);
+router.get("/games/genre/:id", getGamesByGenreId);
 
 router.post("/studio/create", createStudio);
 router.get("/studio/:id", getStudioById);
