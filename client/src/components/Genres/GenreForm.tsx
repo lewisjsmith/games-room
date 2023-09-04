@@ -1,35 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function StudioForm() {
+export default function GenreForm() {
+
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
 
-  const handleDateChange = (e) => {
-    setDate(e.target.value);
-  };
-
   const submitForm = async () => {
     try {
-      const response = await fetch("/api/v1/library/studio/create", {
+      const response = await fetch("/api/v1/library/genre/create", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title: title,
-          founded: date,
+          title: title
         }),
       });
 
       const json = await response.json();
-      navigate(`/studio/${json._id}`)
+      navigate(`/genre/${json._id}`);
     } catch (err) {
       console.log(err);
     }
@@ -44,14 +39,6 @@ export default function StudioForm() {
           name="title"
           value={title}
           onChange={handleTitleChange}
-        />
-        <label htmlFor="founded">Founded: </label>
-        <input
-          type="date"
-          name="founded"
-          value={date}
-          onChange={handleDateChange}
-          min="1950-01-01"
         />
         <button
           type="button"

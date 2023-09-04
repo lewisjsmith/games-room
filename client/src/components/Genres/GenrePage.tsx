@@ -48,7 +48,7 @@ export default function GamePage() {
     });
 
     if (response.ok) {
-      navigate("/genres");
+      navigate(`/genres`);
     } else {
       const json = await response.json();
       console.log(json);
@@ -58,7 +58,16 @@ export default function GamePage() {
   return (
     <div>
       <div>
-        <h2 className="font-bold">Genre Details</h2>
+        <div>
+          <h2 className="font-bold">Genre Details</h2>
+          <button
+            onClick={() => {}}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Edit
+          </button>
+        </div>
+
         <GenreTile details={details} />
         <button
           onClick={() => deleteGenre()}
@@ -80,7 +89,6 @@ export default function GamePage() {
           })}
         </ul>
       </div>
-
     </div>
   );
 }

@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
 
-function GameForm() {
-
-    const navigate = useNavigate();
+function GameFormEdit(props) {
 
     const [studios, setStudios] = useState<IdObject>({});
     const [fetchStudio, setFetchStudio] = useState<boolean>(false);
@@ -28,14 +25,6 @@ function GameForm() {
                 }
                 setStudios({ ...map });
                 setFetchStudio(true);
-                try {
-                    const keys = Object.keys(map);
-                    if(keys.length > 0) {
-                        setFormStudio(map[keys[0]]);
-                    }
-                } catch (err) {
-                    console.log(err);
-                }
             });
     }, [])
 
@@ -49,26 +38,25 @@ function GameForm() {
                 }
                 setGenres({ ...map });
                 setFetchGenres(true);
-                try {
-                    const keys = Object.keys(map);
-                    if(keys.length > 0) {
-                        setFormGenre(map[keys[0]]);
-                    }
-                } catch (err) {
-                    console.log(err);
-                }
             });
     }, [])
 
     useEffect(() => {
+        if(props.details) {
+            setFormTitle(props.details.title)
+            setFormStudio(props.details.studio)
+            setFormGenre(props.details.genre)
+            setFormDate(props.details.releaseDate.split("T")[0])
+        }
+    }, [props]);
 
+    useEffect(() => {
         setFormBody({
             title: formTitle,
             studio: formStudio,
             genre: formGenre,
             releaseDate: formDate
         })
-
     }, [formTitle, formStudio, formGenre, formDate])
 
     function handleStudioChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -94,7 +82,7 @@ function GameForm() {
         e.preventDefault()
 
         try {
-            const response = await fetch("/api/v1/library/game/create",
+            const response = await fetch(`/api/v1/library/game/${props.details.id}/update`,
                 {
                     method: "POST",
                     headers: {
@@ -105,7 +93,7 @@ function GameForm() {
                 })
 
             const json = await response.json();
-            navigate(`/game/${json._id}`)
+            console.log(json);
 
         } catch (err) {
             console.log(err);
@@ -117,14 +105,16 @@ function GameForm() {
 
         <div>
 
-            {fetchStudio && fetchGenres && <form onSubmit={handleSubmit}>
+            {fetchStudio && fetchGenres && formStudio !== ""  && <form onSubmit={handleSubmit}>
 
                 <input name="title" value={formTitle} onChange={handleTitleChange} />
 
                 <select name="studio" value={formStudio} onChange={handleStudioChange}>
+
                     {Object.keys(studios).map((key) => {
                         return <option key={key} value={studios[key]}>{key}</option>
                     })}
+
                 </select>
 
                 <select name="genre" value={formGenre} onChange={handleGenreChange}>
@@ -148,4 +138,4 @@ interface IdObject {
     [key: string]: string;
 }
 
-export default GameForm;
+export default GameFormEdit;

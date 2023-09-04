@@ -48,7 +48,7 @@ export default function GamePage() {
     });
 
     if (response.ok) {
-      navigate("/studios");
+      navigate(`/studios`);
     } else {
       const json = await response.json();
       console.log(json);

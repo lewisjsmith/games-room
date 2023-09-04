@@ -9,6 +9,7 @@ export default function Navigation() {
       <Link to={"/studios"}><p>Studio List</p></Link>
       <Link to={"/studio/new"}><p>New Studio</p></Link>
       <Link to={"/genres"}><p>Genre List</p></Link>
+      <Link to={"/genre/new"}><p>New Genre</p></Link>
     </div>
   );
 }
