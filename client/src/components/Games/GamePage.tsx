@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import GameTile from "./GameTile";
-import GameInstanceTile from "../GameInstances/GameTile";
+import GameInstanceTile from "../GameInstances/GameInstanceTile";
 import GameFormEdit from "./GameFormEdit";
 
 export default function GamePage() {
