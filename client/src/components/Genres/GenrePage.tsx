@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import GenreTile from "./GenreTile";
+import GenreHandler from "./GenreHandler";
 import GameTile from "../Games/GameTile";
 
 export default function GamePage() {
@@ -58,23 +58,8 @@ export default function GamePage() {
   return (
     <div>
       <div>
-        <div>
-          <h2 className="font-bold">Genre Details</h2>
-          <button
-            onClick={() => {}}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Edit
-          </button>
-        </div>
-
-        <GenreTile details={details} />
-        <button
-          onClick={() => deleteGenre()}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Delete
-        </button>
+        <h2 className="font-bold">Genre Details</h2>
+        <GenreHandler details={details} genreId={genreId} deleteGenre={deleteGenre}/>
       </div>
 
       <div>

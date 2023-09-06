@@ -15,7 +15,7 @@ export default function StudioTile(props) {
         <tbody>
           <tr>
             <td>Founded: </td>
-            <td>{founded ? founded : "Null"}</td>
+            <td>{founded ? founded.split("T")[0] : "Null"}</td>
           </tr>
         </tbody>
       </table>

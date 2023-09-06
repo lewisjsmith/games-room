@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import StudioTile from "./StudioTile";
 import GameTile from "../Games/GameTile";
+import StudioHandler from "./StudioHandler";
 
 export default function GamePage() {
+
   const navigate = useNavigate();
   const location = useLocation();
+
   const [studioId, setStudioId] = useState("");
   const [details, setDetails] = useState({});
+
   const [gamesList, setGamesList] = useState([]);
 
   useEffect(() => {
@@ -59,13 +62,7 @@ export default function GamePage() {
     <div>
       <div>
         <h2 className="font-bold">Studio Details</h2>
-        <StudioTile details={details} />
-        <button
-          onClick={() => deleteStudio()}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Delete
-        </button>
+        <StudioHandler details={details} studioId={studioId} deleteStudio={deleteStudio}/>
       </div>
 
       <div>

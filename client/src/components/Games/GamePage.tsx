@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import GameTile from "./GameTile";
+import GameHandler from "./GameHandler";
 import GameInstanceTile from "../GameInstances/GameInstanceTile";
-import GameFormEdit from "./GameFormEdit";
 
 export default function GamePage() {
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,8 +13,6 @@ export default function GamePage() {
 
   const [instanceStatus, setInstanceStatus] = useState("Available");
   const [instanceDate, setInstanceDate] = useState("");
-
-  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     setGameId(location.pathname.split("/")[2]);
@@ -100,41 +96,8 @@ export default function GamePage() {
   return (
     <div>
       <div>
-        <div>
-          <h2 className="font-bold">Game Details</h2>
-          {!edit && (
-            <button
-              onClick={() => setEdit(true)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Edit
-            </button>
-          )}
-        </div>
-
-        {edit && (
-          <div>
-            <GameFormEdit details={{ id: gameId, ...details }} />
-            <button
-              onClick={() => setEdit(false)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
-
-        {!edit && (
-          <div>
-            <GameTile details={details} />
-            <button
-              onClick={() => deleteGame()}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Delete
-            </button>
-          </div>
-        )}
+        <h2 className="font-bold">Game Details</h2>
+        <GameHandler details={details} gameId={gameId} />
       </div>
 
       <div>
@@ -151,7 +114,7 @@ export default function GamePage() {
           {gameInstanceList.map((gi) => {
             return (
               <li key={gi._id}>
-                  <GameInstanceTile details={gi} />
+                <GameInstanceTile details={gi} />
               </li>
             );
           })}

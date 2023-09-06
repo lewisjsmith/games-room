@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function StudioForm() {
   const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [founded, setFounded] = useState("");
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
 
   const handleDateChange = (e) => {
-    setDate(e.target.value);
+    setFounded(e.target.value);
   };
 
   const submitForm = async () => {
@@ -24,12 +25,12 @@ export default function StudioForm() {
         },
         body: JSON.stringify({
           title: title,
-          founded: date,
+          founded: founded,
         }),
       });
 
       const json = await response.json();
-      navigate(`/studio/${json._id}`)
+      navigate(`/studio/${json._id}`);
     } catch (err) {
       console.log(err);
     }
@@ -49,14 +50,11 @@ export default function StudioForm() {
         <input
           type="date"
           name="founded"
-          value={date}
+          value={founded}
           onChange={handleDateChange}
           min="1950-01-01"
         />
-        <button
-          type="button"
-          onClick={() => submitForm()}
-        >
+        <button type="button" onClick={() => submitForm()}>
           Submit
         </button>
       </form>
