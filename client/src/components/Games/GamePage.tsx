@@ -5,8 +5,10 @@ import GameInstanceTile from "../GameInstances/GameTile";
 import GameFormEdit from "./GameFormEdit";
 
 export default function GamePage() {
+
   const navigate = useNavigate();
   const location = useLocation();
+
   const [gameId, setGameId] = useState("");
   const [details, setDetails] = useState({});
   const [gameInstanceList, setGameInstanceList] = useState([]);
@@ -112,7 +114,7 @@ export default function GamePage() {
 
         {edit && (
           <div>
-            <GameFormEdit details={{id: gameId, ...details}}/>
+            <GameFormEdit details={{ id: gameId, ...details }} />
             <button
               onClick={() => setEdit(false)}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -149,7 +151,7 @@ export default function GamePage() {
           {gameInstanceList.map((gi) => {
             return (
               <li key={gi._id}>
-                <GameInstanceTile details={gi} />
+                  <GameInstanceTile details={gi} />
               </li>
             );
           })}
