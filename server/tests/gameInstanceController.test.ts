@@ -25,10 +25,10 @@ afterAll(async () => {
   disconnectDB();
 });
 
-describe.skip("GET /gameInstance/:id", () => {
+describe.skip("GET /gameInstances/:id", () => {
   test("successful get using existing id", async () => {
     const response = await request(app).get(
-      "/api/v1/library/gameinstance/64e4df9c0f790ff853699fa1"
+      "/api/v1/library/gameinstances/64faeb0fe13b712abc47b67d"
     );
     expect(response.statusCode).toBe(200);
   });
@@ -36,31 +36,31 @@ describe.skip("GET /gameInstance/:id", () => {
   describe("unsuccessful with wrong values", () => {
     test("correct format but invalid objectId", async () => {
       const response = await request(app).get(
-        "/api/v1/library/gameinstance/64e4df9c0f790ff853699fa8"
+        "/api/v1/library/gameinstances/64faeb0fe13b712abc47b67e"
       );
       expect(response.statusCode).toBe(404);
     });
 
     test("invalid objectId format", async () => {
       const response = await request(app).get(
-        "/api/v1/library/gameinstance/invalid"
+        "/api/v1/library/gameinstances/invalid"
       );
       expect(response.statusCode).toBe(400);
     });
 
-    test("objectId missing", async () => {
-      const response = await request(app).get("/api/v1/library/gameinstance/");
-      expect(response.statusCode).toBe(400);
-    });
+    // test("objectId missing", async () => {
+    //   const response = await request(app).get("/api/v1/library/gameinstances/");
+    //   expect(response.statusCode).toBe(400);
+    // });
   });
 });
 
-describe.skip("POST /gameInstance/create", () => {
+describe.skip("POST /gameInstance", () => {
   test("successful creation using existing game", async () => {
     const response1 = await request(app)
-      .post("/api/v1/library/gameinstance/create")
+      .post("/api/v1/library/gameinstances")
       .send({
-        game: "64f3289e2bc58869b9da549c",
+        game: "64f896aeaacd58b9e6a677f3",
         status: "Available",
         due_back: new Date(),
       })
@@ -69,9 +69,9 @@ describe.skip("POST /gameInstance/create", () => {
     expect(response1.statusCode).toBe(200);
 
     const response2 = await request(app)
-      .post("/api/v1/library/gameinstance/create")
+      .post("/api/v1/library/gameinstances")
       .send({
-        game: "64f3289e2bc58869b9da549c",
+        game: "64f896aeaacd58b9e6a677f3",
         status: "Loaned",
         due_back: new Date(),
       })
@@ -80,9 +80,9 @@ describe.skip("POST /gameInstance/create", () => {
     expect(response2.statusCode).toBe(200);
 
     const response3 = await request(app)
-      .post("/api/v1/library/gameinstance/create")
+      .post("/api/v1/library/gameinstances")
       .send({
-        game: "64f3289e2bc58869b9da549c",
+        game: "64f896aeaacd58b9e6a677f3",
         status: "Lost",
         due_back: new Date(),
       })
@@ -92,19 +92,19 @@ describe.skip("POST /gameInstance/create", () => {
   });
 });
 
-describe.skip("POST /gameInstance/:id/update", () => {
+describe.skip("PUT /gameInstance/:id/", () => {
   describe("Successful edit", () => {
     let gameId;
     let status;
 
-    const game1 = "64ece275b5c60932e8f0a78f";
-    const game2 = "64e4df9c0f790ff853699f99";
+    const game1 = "64f896aeaacd58b9e6a677f3";
+    const game2 = "64faf47026dd0bb37256a105";
     const status1 = "Available";
     const status2 = "Lost";
 
     beforeEach(async () => {
       const response = await request(app).get(
-        "/api/v1/library/gameinstance/64e4df9c0f790ff853699fa1"
+        "/api/v1/library/gameinstances/64faf6be912b9fb6335bd3e7"
       );
 
       if (response.body.game === game1) {
@@ -122,7 +122,7 @@ describe.skip("POST /gameInstance/:id/update", () => {
 
     test("Valid id and game should respond with 200/ok", async () => {
       const response = await request(app)
-        .post("/api/v1/library/gameinstance/64e4df9c0f790ff853699fa1/update")
+        .put("/api/v1/library/gameinstances/64faf6be912b9fb6335bd3e7")
         .send({
           game: gameId,
         })
@@ -131,7 +131,7 @@ describe.skip("POST /gameInstance/:id/update", () => {
       expect(response.statusCode).toBe(200);
 
       const review = await request(app).get(
-        "/api/v1/library/gameInstance/64e4df9c0f790ff853699fa1"
+        "/api/v1/library/gameInstances/64faf6be912b9fb6335bd3e7"
       );
       expect(review.statusCode).toBe(200);
       expect(review.body.game).toBe(gameId);
@@ -139,7 +139,7 @@ describe.skip("POST /gameInstance/:id/update", () => {
 
     test("Valid id and status should respond with 200/ok", async () => {
       const response = await request(app)
-        .post("/api/v1/library/gameinstance/64e4df9c0f790ff853699fa1/update")
+        .put("/api/v1/library/gameinstances/64faf6be912b9fb6335bd3e7")
         .send({
           status: status,
         })
@@ -149,28 +149,28 @@ describe.skip("POST /gameInstance/:id/update", () => {
       expect(response.statusCode).toBe(200);
     });
 
-    test.skip("Valid id and date should respond with 200/ok", async () => {
-      const newDate = new Date();
+    // test("Valid id and date should respond with 200/ok", async () => {
+    //   const newDate = new Date();
 
-      const response = await request(app)
-        .post("/api/v1/library/gameinstance/64e4df9c0f790ff853699fa1/update")
-        .send({
-          due_back: newDate,
-        })
-        .set("Content-Type", "application/json")
-        .set("Accept", "application/json");
-      expect(response.statusCode).toBe(200);
+    //   const response = await request(app)
+    //     .put("/api/v1/library/gameinstances/64faf6be912b9fb6335bd3e7")
+    //     .send({
+    //       due_back: newDate,
+    //     })
+    //     .set("Content-Type", "application/json")
+    //     .set("Accept", "application/json");
+    //   expect(response.statusCode).toBe(200);
 
-      const review = await request(app).get(
-        "/api/v1/library/gameinstance/64e4df9c0f790ff853699fa1"
-      );
-      expect(review.body.due_back).toBe(newDate);
-    });
+    //   const review = await request(app).get(
+    //     "/api/v1/library/gameinstances/64faf6be912b9fb6335bd3e7"
+    //   );
+    //   expect(review.body.due_back).toBe(newDate);
+    // });
 
     describe("Edit errors", () => {
       test("invalid id but correct format", async () => {
         const response = await request(app)
-          .post("/api/v1/library/gameinstance/64eb7e040d1602d0a25fa2d4/update")
+          .put("/api/v1/library/gameinstances/64faf6be912b9fb6335bd3e6")
           .send({
             title: "Invalid ID",
           })
@@ -182,7 +182,7 @@ describe.skip("POST /gameInstance/:id/update", () => {
 
       test("invalid id format", async () => {
         const response = await request(app)
-          .post("/api/v1/library/gameinstance/invalid/update")
+          .put("/api/v1/library/gameinstances/invalid")
           .send({
             title: "Invalid ID",
           })
@@ -195,14 +195,14 @@ describe.skip("POST /gameInstance/:id/update", () => {
   });
 });
 
-describe.skip("DELETE /gameinstance/:id/delete", () => {
+describe.skip("DELETE /gameinstance/:id", () => {
   let testId: mongoose.Types.ObjectId;
 
   beforeEach(async () => {
     const response = await request(app)
-      .post("/api/v1/library/gameinstance/create")
+      .post("/api/v1/library/gameinstances")
       .send({
-        game: "64e797aa6f6e45da032679a6",
+        game: "64f896aeaacd58b9e6a677f3",
         status: "Available",
         due_back: new Date(),
       })
@@ -217,19 +217,19 @@ describe.skip("DELETE /gameinstance/:id/delete", () => {
 
   test("Return 200, id no longer found", async () => {
     const response = await request(app)
-      .post(`/api/v1/library/gameinstance/${testId}/delete`)
+      .delete(`/api/v1/library/gameinstances/${testId}`)
       .send("delete");
     expect(response.statusCode).toBe(200);
   });
 
   test("Return 200, id no longer found", async () => {
     const response = await request(app)
-      .post(`/api/v1/library/gameinstance/${testId}/delete`)
+      .delete(`/api/v1/library/gameinstances/${testId}`)
       .send("delete");
     expect(response.statusCode).toBe(200);
 
     const retry = await request(app)
-      .post(`/api/v1/library/gameinstance/${testId}/delete`)
+      .delete(`/api/v1/library/gameinstances/${testId}`)
       .send("delete");
     expect(retry.statusCode).toBe(404);
     expect(retry.body.errors).toBe("ID not found.");
@@ -245,10 +245,10 @@ describe.skip("GET /gameinstances/", () => {
   });
 });
 
-describe.skip("GET /gameinstances/:id", () => {
+describe.skip("GET /gameinstances/game/:id", () => {
   test("a list of gameinstances for the id is returned", async () => {
     const response = await request(app).get(
-      "/api/v1/library/gameinstances/64f324e2c8bbe3fede0a5bb1"
+      "/api/v1/library/gameinstances/game/64f896aeaacd58b9e6a677f3"
     );
 
     expect(response.statusCode).toBe(200);

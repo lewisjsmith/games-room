@@ -101,7 +101,7 @@ export const deleteGameInstance = asyncHandler(async (req, res, next) => {
     });
 
     if (response) {
-      res.status(200).send("deleted");
+      res.status(200).json({message: "Successfully deleted."});
     } else {
       res.status(404).json({ errors: "ID not found." });
     }

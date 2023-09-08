@@ -30,10 +30,10 @@ router.delete("/genres/:id", deleteGenre);
 router.get("/genres", getGenres);
 // router.get("/genre/", genreIndex)
 
-router.post("/gameinstance/create", createGameInstance);
-router.get("/gameinstance/:id", getGameInstanceById);
-router.post("/gameinstance/:id/update", updateGameInstance);
-router.post("/gameinstance/:id/delete", deleteGameInstance);
-router.get("/gameinstance/", gameInstanceIndex);
+router.post("/gameinstances", createGameInstance);
+router.get("/gameinstances/:id", getGameInstanceById);
+router.put("/gameinstances/:id", updateGameInstance);
+router.delete("/gameinstances/:id", deleteGameInstance);
+// router.get("/gameinstance/", gameInstanceIndex);
 router.get("/gameinstances/", getGameInstancesList)
-router.get("/gameinstances/:id", getGameInstancesByGameId)
+router.get("/gameinstances/game/:id", getGameInstancesByGameId)
