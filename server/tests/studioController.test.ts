@@ -33,13 +33,13 @@ describe.skip("GET /studio", () => {
         // respond with a 200 status code 
         // specify json in the content type header
         test("should respond with a 200 status code", async () => {
-            const response = await request(app).get("/api/v1/library/studio/64e4df9c0f790ff853699f90")
+            const response = await request(app).get("/api/v1/library/studios/64f8a18b928453cb58661eb1")
             expect(response.statusCode).toBe(200);
         });
 
         // Tests for keys here, title first
         test("should respond with a json object with the document", async () => {
-            const response = await request(app).get("/api/v1/library/studio/64e4df9c0f790ff853699f90")
+            const response = await request(app).get("/api/v1/library/studios/64f8a18b928453cb58661eb1")
             expect(Object.keys(response.body)).toEqual(expect.arrayContaining(["title", "founded"]));
         });
     })
@@ -48,33 +48,33 @@ describe.skip("GET /studio", () => {
 
         // respond with 400 not found
         test("should respond with a 400 status code", async () => {
-            const response = await request(app).get("/api/v1/library/studio/123")
+            const response = await request(app).get("/api/v1/library/studios/123")
             expect(response.statusCode).toBe(400);
             expect(response.body.errors).toBe("Not a valid ObjectId.");
         })
 
         // respond with 400 Invalid URL
-        test("shouldn't respond with all studios on this url", async () => {
-            const response = await request(app).get("/api/v1/library/studio/")
-            expect(response.statusCode).toBe(400);
-            expect(response.body.errors).toBe("Invalid URL.");
-        })
+        // test("shouldn't respond with all studios on this url", async () => {
+        //     const response = await request(app).get("/api/v1/library/studios/")
+        //     expect(response.statusCode).toBe(400);
+        //     expect(response.body.errors).toBe("Invalid URL.");
+        // })
 
         test("should respond with a 404 not found", async () => {
-            const response = await request(app).get("/api/v1/library/studio/64e4df9c0f790ff853699f19")
+            const response = await request(app).get("/api/v1/library/studios/64e4df9c0f790ff853699f19")
             expect(response.statusCode).toBe(404);
         })
     })
 
 })
 
-describe.skip("POST /studio/create", () => {
+describe.skip("POST /studios", () => {
 
     describe("Correct field details", () => {
 
         test("Should respond with 200/ok", async () => {
             const response = await request(app)
-                .post("/api/v1/library/studio/create")
+                .post("/api/v1/library/studios")
                 .send({ title: `Studio Success Test ${Math.ceil(Math.random()*100)}`, founded: new Date() })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
@@ -87,7 +87,7 @@ describe.skip("POST /studio/create", () => {
 
         test("Invalid title should notify", async () => {
             const response = await request(app)
-                .post("/api/v1/library/studio/create")
+                .post("/api/v1/library/studios")
                 .send({ title: "", founded: new Date() })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
@@ -99,16 +99,16 @@ describe.skip("POST /studio/create", () => {
 
 });
 
-describe.skip("POST /studio/:id/update", () => {
+describe.skip("PUT /studio/:id", () => {
 
-    describe("Successful edit", () => {
+    describe.skip("Successful edit", () => {
 
-        test.skip("Valid id and title should respond with 200/ok", async () => {
+        test("Valid id and title should respond with 200/ok", async () => {
 
             const title = `Title Random ${Math.ceil(Math.random()*100)}` 
 
             const response = await request(app)
-                .post("/api/v1/library/studio/64e4df9c0f790ff853699f90/update")
+                .put("/api/v1/library/studios/64faf8dcc64d8a241cc30a2b")
                 .send({
                     title: title
                 })
@@ -117,7 +117,7 @@ describe.skip("POST /studio/:id/update", () => {
             expect(response.statusCode).toBe(200);
 
             const review = await request(app)
-                .get("/api/v1/library/studio/64e4df9c0f790ff853699f90")
+                .get("/api/v1/library/studios/64faf8dcc64d8a241cc30a2b")
             expect(review.statusCode).toBe(200);
             expect(review.body.title).toBe(title);
 
@@ -129,7 +129,7 @@ describe.skip("POST /studio/:id/update", () => {
 
             const response = await request(app)
 
-                .post("/api/v1/library/studio/64eb7e040d1602d0a25fa2d6/update")
+                .put("/api/v1/library/studios/64faf8dcc64d8a241cc30a2b")
                 .send({
                     founded: date
                 })
@@ -140,13 +140,13 @@ describe.skip("POST /studio/:id/update", () => {
 
         })
 
-        test.skip("Valid id && title && date should respond with 200/ok", async () => {
+        test("Valid id && title && date should respond with 200/ok", async () => {
 
             const title = `Title Random ${Math.ceil(Math.random()*100)}` 
             const date = new Date();
 
             const response = await request(app)
-                .post("/api/v1/library/studio/64eb7e040d1602d0a25fa2d6/update")
+                .put("/api/v1/library/studios/64faf8dcc64d8a241cc30a2b")
                 .send({
                     title: title,
                     founded: date
@@ -164,12 +164,12 @@ describe.skip("POST /studio/:id/update", () => {
 
     })
 
-    describe("Edit errors", () => {
+    describe.skip("Edit errors", () => {
 
         test("invalid input, title", async () => {
 
             const response = await request(app)
-                .post("/api/v1/library/studio/64eb7e040d1602d0a25fa2d3/update")
+                .put("/api/v1/library/studios/64faf8dcc64d8a241cc30a2b")
                 .send({
                     title: ""
                 })
@@ -183,7 +183,7 @@ describe.skip("POST /studio/:id/update", () => {
 
         test("invalid id but correct format", async () => {
             const response = await request(app)
-                .post("/api/v1/library/studio/64eb7e040d1602d0a25fa2d4/update")
+                .put("/api/v1/library/studios/64faf8dcc64d8a241cc30a2c")
                 .send({
                     title: "Invalid ID"
                 })
@@ -195,7 +195,7 @@ describe.skip("POST /studio/:id/update", () => {
 
         test("invalid id format", async () => {
             const response = await request(app)
-                .post("/api/v1/library/studio/invalid/update")
+                .put("/api/v1/library/studios/invalid")
                 .send({
                     title: "Invalid ID"
                 })
@@ -209,7 +209,7 @@ describe.skip("POST /studio/:id/update", () => {
 
 });
 
-describe.skip("DELETE /game/:id/delete", () => {
+describe.skip("DELETE /studios/:id", () => {
 
     let testId: mongoose.Types.ObjectId;
 
@@ -218,7 +218,7 @@ describe.skip("DELETE /game/:id/delete", () => {
         const title = `Delete test ${Math.ceil(Math.random() * 100)}`;
 
         const response = await request(app)
-            .post("/api/v1/library/studio/create")
+            .post("/api/v1/library/studios")
             .send({
                 title: title,
                 founded: new Date()
@@ -242,7 +242,7 @@ describe.skip("DELETE /game/:id/delete", () => {
     test("Return 200, id no longer found", async () => {
 
         const response = await request(app)
-            .post(`/api/v1/library/studio/${testId}/delete`)
+            .delete(`/api/v1/library/studios/${testId}`)
             .send("delete")
         expect(response.statusCode).toBe(200);
 
@@ -251,12 +251,12 @@ describe.skip("DELETE /game/:id/delete", () => {
     test("Return 200, id no longer found", async () => {
 
         const response = await request(app)
-            .post(`/api/v1/library/studio/${testId}/delete`)
+            .delete(`/api/v1/library/studios/${testId}`)
             .send("delete")
         expect(response.statusCode).toBe(200);
 
         const retry = await request(app)
-            .post(`/api/v1/library/studio/${testId}/delete`)
+            .delete(`/api/v1/library/studios/${testId}`)
             .send("delete")
         expect(retry.statusCode).toBe(400);
         expect(retry.body.errors).toBe("ID not found.");

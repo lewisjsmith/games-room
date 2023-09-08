@@ -8,9 +8,9 @@ import mongoose from "mongoose";
 // const offset = placeholder.getTimezoneOffset()/60;
 // const d = new Date(1992, 9, 10, -offset)
 
-export const gameIndex = asyncHandler(async (req, res, next) => {
-  res.status(400).json({ errors: "Invalid URL." });
-});
+// export const gameIndex = asyncHandler(async (req, res, next) => {
+//   res.status(400).json({ errors: "Invalid URL." });
+// });
 
 export const getGameById = asyncHandler(async (req, res, next) => {
   if (!mongoose.isValidObjectId(req.params.id)) {

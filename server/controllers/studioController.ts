@@ -148,7 +148,7 @@ export const deleteStudio = asyncHandler(async (req, res, next) => {
     const response = await StudioModel.findOneAndRemove({ _id: req.params.id });
 
     if (response) {
-      res.status(200).send("deleted");
+      res.status(200).json({message: "Successfully deleted."});
     } else {
       res.status(400).json({ errors: "ID not found." });
       return;

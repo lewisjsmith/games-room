@@ -16,12 +16,12 @@ router.get("/games", getGamesList);
 router.get("/games/studio/:id", getGamesByStudioId);
 router.get("/games/genre/:id", getGamesByGenreId);
 
-router.post("/studio/create", createStudio);
-router.get("/studio/:id", getStudioById);
-router.post("/studio/:id/update", updateStudio);
-router.post("/studio/:id/delete", deleteStudio);
+router.post("/studios", createStudio);
+router.get("/studios/:id", getStudioById);
+router.put("/studios/:id", updateStudio);
+router.delete("/studios/:id", deleteStudio);
 router.get("/studios", getStudios);
-router.get("/studio/", studioIndex);
+// router.get("/studio/", studioIndex);
 
 router.post("/genre/create", createGenre);
 router.get("/genre/:id", getGenreById);
