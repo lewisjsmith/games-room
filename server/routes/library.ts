@@ -23,12 +23,12 @@ router.delete("/studios/:id", deleteStudio);
 router.get("/studios", getStudios);
 // router.get("/studio/", studioIndex);
 
-router.post("/genre/create", createGenre);
-router.get("/genre/:id", getGenreById);
-router.post("/genre/:id/update", updateGenre);
-router.post("/genre/:id/delete", deleteGenre);
+router.post("/genres", createGenre);
+router.get("/genres/:id", getGenreById);
+router.put("/genres/:id", updateGenre);
+router.delete("/genres/:id", deleteGenre);
 router.get("/genres", getGenres);
-router.get("/genre/", genreIndex)
+// router.get("/genre/", genreIndex)
 
 router.post("/gameinstance/create", createGameInstance);
 router.get("/gameinstance/:id", getGameInstanceById);
