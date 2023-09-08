@@ -125,11 +125,29 @@ export default function GameHandler(props) {
     }
   }
 
+  async function deleteGame() {
+    const response = await fetch(`/api/v1/library/games/${gameId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    if (response.ok) {
+      navigate(`/games`);
+    } else {
+      const json = await response.json();
+      console.log(json);
+    }
+  }
+
   return (
     <div>
       <div>
         <GameTile details={props.details} />
         <button onClick={() => setEdit(true)}>Edit</button>
+        <button onClick={() => deleteGame()}>Delete</button>
       </div>
 
       {edit && (
