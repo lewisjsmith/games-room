@@ -42,23 +42,6 @@ export default function GamePage() {
     }
   }, [gameId]);
 
-  async function deleteGame() {
-    const response = await fetch(`/api/v1/library/games/${gameId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-
-    if (response.ok) {
-      navigate(`/games`);
-    } else {
-      const json = await response.json();
-      console.log(json);
-    }
-  }
-
   async function createInstance() {
     const response = await fetch("/api/v1/library/gameinstances", {
       method: "POST",
