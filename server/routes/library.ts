@@ -7,12 +7,12 @@ import {getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameIn
 
 export const router = express.Router();
 
-router.post("/game/create", createGame);
-router.get("/game/:id", getGameById);
-router.post("/game/:id/update", updateGame);
-router.post("/game/:id/delete", deleteGame);
+router.post("/games", createGame);
+router.get("/games/:id", getGameById);
+router.put("/games/:id", updateGame);
+router.delete("/games/:id", deleteGame);
 router.get("/games", getGamesList);
-router.get("/game/", gameIndex);
+// router.get("/game/", gameIndex);
 router.get("/games/studio/:id", getGamesByStudioId);
 router.get("/games/genre/:id", getGamesByGenreId);
 

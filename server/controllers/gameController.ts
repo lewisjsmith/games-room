@@ -156,7 +156,7 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
     const response = await GameModel.findOneAndRemove({ _id: req.params.id });
 
     if (response) {
-      res.status(200).send("deleted");
+      res.status(200).send({message: "Successfully deleted."});
     } else {
       res.status(404).json({ errors: "ID not found." });
       return;

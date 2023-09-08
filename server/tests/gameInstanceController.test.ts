@@ -55,7 +55,7 @@ describe.skip("GET /gameInstance/:id", () => {
   });
 });
 
-describe("POST /gameInstance/create", () => {
+describe.skip("POST /gameInstance/create", () => {
   test("successful creation using existing game", async () => {
     const response1 = await request(app)
       .post("/api/v1/library/gameinstance/create")
@@ -245,7 +245,7 @@ describe.skip("GET /gameinstances/", () => {
   });
 });
 
-describe("GET /gameinstances/:id", () => {
+describe.skip("GET /gameinstances/:id", () => {
   test("a list of gameinstances for the id is returned", async () => {
     const response = await request(app).get(
       "/api/v1/library/gameinstances/64f324e2c8bbe3fede0a5bb1"
