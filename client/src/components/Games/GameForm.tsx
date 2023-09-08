@@ -94,7 +94,7 @@ function GameForm() {
         e.preventDefault()
 
         try {
-            const response = await fetch("/api/v1/library/game/create",
+            const response = await fetch("/api/v1/library/games",
                 {
                     method: "POST",
                     headers: {

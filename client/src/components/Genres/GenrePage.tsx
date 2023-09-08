@@ -16,7 +16,7 @@ export default function GamePage() {
 
   useEffect(() => {
     if (genreId !== "") {
-      fetch(`/api/v1/library/genre/${genreId}`)
+      fetch(`/api/v1/library/genres/${genreId}`)
         .then((res) => {
           return res.json();
         })
@@ -39,8 +39,8 @@ export default function GamePage() {
   }, [genreId]);
 
   async function deleteGenre() {
-    const response = await fetch(`/api/v1/library/genre/${genreId}/delete`, {
-      method: "POST",
+    const response = await fetch(`/api/v1/library/genres/${genreId}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

@@ -12,7 +12,7 @@ export default function GenreForm() {
 
   const submitForm = async () => {
     try {
-      const response = await fetch("/api/v1/library/genre/create", {
+      const response = await fetch("/api/v1/library/genres", {
         method: "POST",
         headers: {
           Accept: "application/json",

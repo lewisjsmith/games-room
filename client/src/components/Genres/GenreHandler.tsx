@@ -27,8 +27,8 @@ export default function GenreHandler(props) {
   };
 
   async function postEdit() {
-    const response = await fetch(`/api/v1/library/genre/${genreId}/update`, {
-      method: "POST",
+    const response = await fetch(`/api/v1/library/genres/${genreId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

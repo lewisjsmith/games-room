@@ -37,9 +37,9 @@ export default function GameInstanceTile(props) {
   async function saveChange() {
     try {
       const response = await fetch(
-        `/api/v1/library/gameinstance/${_id}/update`,
+        `/api/v1/library/gameinstances/${_id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -59,9 +59,9 @@ export default function GameInstanceTile(props) {
   }
 
   async function deleteInstance() {
-    const response = await fetch(`/api/v1/library/gameinstance/${_id}/delete`, 
+    const response = await fetch(`/api/v1/library/gameinstances/${_id}`, 
     {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json"

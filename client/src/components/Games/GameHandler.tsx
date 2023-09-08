@@ -103,8 +103,8 @@ export default function GameHandler(props) {
   };
 
   async function postEdit() {
-    const response = await fetch(`/api/v1/library/game/${gameId}/update`, {
-      method: "POST",
+    const response = await fetch(`/api/v1/library/games/${gameId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

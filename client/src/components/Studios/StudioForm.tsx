@@ -17,7 +17,7 @@ export default function StudioForm() {
 
   const submitForm = async () => {
     try {
-      const response = await fetch("/api/v1/library/studio/create", {
+      const response = await fetch("/api/v1/library/studios", {
         method: "POST",
         headers: {
           Accept: "application/json",

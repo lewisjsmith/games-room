@@ -38,8 +38,8 @@ export default function StudioHandler(props) {
   };
 
   async function postEdit() {
-    const response = await fetch(`/api/v1/library/studio/${studioId}/update`, {
-      method: "POST",
+    const response = await fetch(`/api/v1/library/studios/${studioId}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

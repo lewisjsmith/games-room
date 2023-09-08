@@ -19,7 +19,7 @@ export default function GamePage() {
 
   useEffect(() => {
     if (studioId !== "") {
-      fetch(`/api/v1/library/studio/${studioId}`)
+      fetch(`/api/v1/library/studios/${studioId}`)
         .then((res) => {
           return res.json();
         })
@@ -42,8 +42,8 @@ export default function GamePage() {
   }, [studioId]);
 
   async function deleteStudio() {
-    const response = await fetch(`/api/v1/library/studio/${studioId}/delete`, {
-      method: "POST",
+    const response = await fetch(`/api/v1/library/studios/${studioId}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

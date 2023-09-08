@@ -20,7 +20,7 @@ export default function GamePage() {
 
   useEffect(() => {
     if (gameId !== "") {
-      fetch(`/api/v1/library/game/${gameId}`)
+      fetch(`/api/v1/library/games/${gameId}`)
         .then((res) => {
           return res.json();
         })
@@ -32,7 +32,7 @@ export default function GamePage() {
 
   useEffect(() => {
     if (gameId !== "") {
-      fetch(`/api/v1/library/gameinstances/${gameId}`)
+      fetch(`/api/v1/library/gameinstances/game/${gameId}`)
         .then((res) => {
           return res.json();
         })
@@ -43,8 +43,8 @@ export default function GamePage() {
   }, [gameId]);
 
   async function deleteGame() {
-    const response = await fetch(`/api/v1/library/game/${gameId}/delete`, {
-      method: "POST",
+    const response = await fetch(`/api/v1/library/games/${gameId}`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -60,7 +60,7 @@ export default function GamePage() {
   }
 
   async function createInstance() {
-    const response = await fetch("/api/v1/library/gameinstance/create", {
+    const response = await fetch("/api/v1/library/gameinstances", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
