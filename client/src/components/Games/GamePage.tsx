@@ -4,6 +4,7 @@ import GameHandler from "./GameHandler";
 import GameInstanceTile from "../GameInstances/GameInstanceTile";
 import EditWindow from "./EditWindow";
 import InstanceEditWindow from "../GameInstances/InstanceEditWindow";
+import InstanceCreate from "../GameInstances/InstanceCreate";
 
 export default function GamePage(props) {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function GamePage(props) {
 
   const [edit, setEdit] = useState(false);
   const [instanceEdit, setInstanceEdit] = useState(false);
+  const [instanceCreate, setInstanceCreate] = useState(false);
 
   useEffect(() => {
     setGameId(location.pathname.split("/")[2]);
@@ -91,6 +93,10 @@ export default function GamePage(props) {
     setInstanceEdit(!instanceEdit);
   }
 
+  function toggleInstanceCreate() {
+    setInstanceCreate(!instanceCreate);
+  }
+
   return (
     <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7">
 
@@ -107,7 +113,10 @@ export default function GamePage(props) {
         <div className="w-full flex justify-between items-center">
           <h2 className="font-bold">Game Instances</h2>
           <button
-            onClick={() => { }}
+            onClick={() => {
+              setInstanceCreate(true)
+              props.toggleFade()
+            }}
             className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white"
           >
             CREATE
@@ -117,7 +126,7 @@ export default function GamePage(props) {
         <ul className="w-full flex flex-col justify-start items-center gap-2 overflow-y-scroll">
           {gameInstanceList.map((gi) => {
             return (
-              <li key={gi._id} onClick={() => {
+              <li key={gi._id} className="w-full" onClick={() => {
                 setInstanceId(gi._id);
                 setInstanceEdit(true);
                 props.toggleFade();
@@ -129,6 +138,12 @@ export default function GamePage(props) {
         </ul>
 
       </div>
+
+      {instanceCreate && (
+        <div>
+          <InstanceCreate toggleInstanceCreate={toggleInstanceCreate} details={details} toggleFade={props.toggleFade}/>
+        </div>
+      )}
 
       {instanceEdit && (
         <div>

@@ -77,59 +77,11 @@ export default function GameInstanceTile(props) {
   }
 
   return (
-    <div className="w-full flex gap-2">
-
+    <div className="w-full flex justify-start gap-2">
             <span className="font-bold">Status: </span>
             <span>{localStatus ? localStatus : "Null"}</span>
             <span className="font-bold">Due: </span>
             <span>{localDue ? localDue : "Null"}</span>
-
-
-        {/* <button
-          onClick={() => setEdit(!edit)}
-          className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white"
-        >
-          Edit
-        </button>
-        <button
-          onClick={() => deleteInstance()}
-          className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white"
-        >
-          Delete
-        </button> */}
-
-      {/* {edit && (
-        <div>
-          <form action="">
-            <label htmlFor="status">Status: </label>
-            <select
-              name="status"
-              onChange={handleStatusChange}
-              id=""
-              value={localStatus}
-            >
-              <option value="Available">Available</option>
-              <option value="Loaned">Loaned</option>
-              <option value="Lost">Lost</option>
-            </select>
-            <label htmlFor="due_back">Due: </label>
-            <input
-              type="date"
-              name="due_back"
-              value={localDue}
-              id=""
-              min="1950-01-01"
-              onChange={handleDueChange}
-            />
-          </form>
-          <button
-            onClick={saveChange}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Save
-          </button>
-        </div>
-      )} */}
     </div>
   );
 }

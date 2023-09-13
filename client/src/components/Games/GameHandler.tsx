@@ -32,7 +32,7 @@ export default function GameHandler(props) {
 
   return (
     <div className="w-full position: relative z-10">
-      <div className="bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center">
+      <div className="bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-2">
         <GameTile details={props.details} />
         <div className="w-full flex justify-end gap-5">
           <button onClick={() => {

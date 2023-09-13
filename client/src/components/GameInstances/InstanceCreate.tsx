@@ -1,28 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function InstanceEditWindow(props) {
+export default function InstanceCreate(props) {
 
     const navigate = useNavigate();
 
-    const [localStatus, setLocalStatus] = useState("");
+    const [localStatus, setLocalStatus] = useState("Available");
     const [localDue, setLocalDue] = useState("");
     const [formBody, setFormBody] = useState({});
 
-    const { _id, status, due_back } = { ...props.details };
-
-    useEffect(() => {
-        setLocalStatus(status);
-        if (due_back) {
-            setLocalDue(due_back.split("T")[0]);
-        }
-    }, []);
-
     useEffect(() => {
         setFormBody({
-            status: localStatus,
+            ...formBody,
             due_back: localDue,
-        });
+            status: localStatus
+        })
     }, [localStatus, localDue]);
 
     const handleStatusChange = (e) => {
@@ -36,42 +28,24 @@ export default function InstanceEditWindow(props) {
     async function saveChange() {
         try {
             const response = await fetch(
-                `/api/v1/library/gameinstances/${_id}`,
+                `/api/v1/library/gameinstances`,
                 {
-                    method: "PUT",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                     },
-                    body: JSON.stringify(formBody),
+                    body: JSON.stringify({game: props.details._id,  ...formBody}),
                 }
             );
 
             const json = await response.json();
 
             if (response.ok) {
-                // setEdit(false);
+                navigate(0);
             }
         } catch (err) {
             console.log(err);
-        }
-    }
-
-    async function deleteInstance() {
-        const response = await fetch(`/api/v1/library/gameinstances/${_id}`,
-            {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json"
-                }
-            })
-
-        if (response.ok) {
-            navigate(0);
-        } else {
-            const json = await response.json();
-            console.log(json);
         }
     }
 
@@ -79,7 +53,7 @@ export default function InstanceEditWindow(props) {
         <div className="position: absolute top-2/4 left-2/4 w-5/6 -translate-x-2/4 -translate-y-2/4 z-50 bg-white shadow-lg p-5 flex flex-col justify-center items-center gap-5 rounded-xl">
             <form action="" className="flex flex-col gap-5">
                 <h3 className="font-bold">
-                    Creating an instance of "{props.title}"
+                    Creating an instance of "{props.details.title}"
                 </h3>
                 <div className="flex justify-between gap-5">
                     <label htmlFor="status">Status: </label>
@@ -93,7 +67,7 @@ export default function InstanceEditWindow(props) {
                     <label htmlFor="due_back">Due: </label>
                     <input
                         type="date"
-                        value={localDue}
+                        value={"2023-09-13"}
                         name="due_back"
                         id=""
                         min="1950-01-01"
@@ -106,7 +80,7 @@ export default function InstanceEditWindow(props) {
                         type="button"
                         onClick={() => {
                             saveChange()
-                            props.toggleInstanceEdit()
+                            props.toggleInstanceCreate()
                             props.toggleFade()
                         }}
                         className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white"
@@ -116,18 +90,7 @@ export default function InstanceEditWindow(props) {
                     <button
                         type="button"
                         onClick={() => {
-                            props.toggleInstanceEdit()
-                            props.toggleFade()
-                            deleteInstance();
-                        }}
-                        className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-red-400 text-white"
-                    >
-                        DELETE
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            props.toggleInstanceEdit()
+                            props.toggleInstanceCreate()
                             props.toggleFade();
                         }}
                         className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white"

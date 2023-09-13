@@ -144,43 +144,62 @@ export default function EditWindow(props) {
     }
 
     return (
-        <div className="position: absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 z-50 bg-white shadow-lg p-5 flex flex-col justify-center items-center">
-            <form onSubmit={postEdit}>
-                <input name="title" value={title} onChange={handleTitleChange} />
+        <div className="position: absolute top-2/4 left-2/4 w-5/6 -translate-x-2/4 -translate-y-2/4 z-50 bg-white shadow-lg p-5 flex flex-col justify-center items-center gap-5 rounded-xl">
+            <form onSubmit={postEdit} className="flex flex-col gap-5">
+                <div className="flex justify-between gap-5">
+                    <label htmlFor="title" className="flex justify-center items-center">Title: </label>
+                    <input className="w-9/12 border-solid border-2 border-gray-200 pl-4 pr-4 pt-2 pb-2 text-center" name="title" value={title} onChange={handleTitleChange} />
+                </div>
+                <div className="flex justify-between gap-5">
+                <label htmlFor="studio" className="flex justify-center items-center">Studio: </label>
+                    <select name="studio" value={studio} onChange={handleStudioChange} className="w-9/12 text-center">
+                        {Object.keys(studios).map((key) => {
+                            return (
+                                <option key={key} value={studios[key]}>
+                                    {key}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
+                <div className="flex justify-between gap-5">
+                <label htmlFor="genre" className="flex justify-center items-center">Genre: </label>
+                    <select name="genre" value={genre} onChange={handleGenreChange} className="w-9/12 text-center">
+                        {Object.keys(genres).map((key) => {
+                            return (
+                                <option key={key} value={genres[key]}>
+                                    {key}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
+                <div className="flex justify-between gap-5">
+                <label htmlFor="releaseDate" className="flex justify-center items-center">Release: </label>
+                    <input
+                        type="date"
+                        name="releaseDate"
+                        value={releaseDate}
+                        min="1950-01-01"
+                        onChange={handleReleaseDateChange}
+                        className="w-9/12 text-right"
+                    />
+                </div>
 
-                <select name="studio" value={studio} onChange={handleStudioChange}>
-                    {Object.keys(studios).map((key) => {
-                        return (
-                            <option key={key} value={studios[key]}>
-                                {key}
-                            </option>
-                        );
-                    })}
-                </select>
-
-                <select name="genre" value={genre} onChange={handleGenreChange}>
-                    {Object.keys(genres).map((key) => {
-                        return (
-                            <option key={key} value={genres[key]}>
-                                {key}
-                            </option>
-                        );
-                    })}
-                </select>
-
-                <input
-                    type="date"
-                    name="releaseDate"
-                    value={releaseDate}
-                    min="1950-01-01"
-                    onChange={handleReleaseDateChange}
-                />
             </form>
-            <button onClick={() => postEdit()}>Save</button>
-            <button onClick={() => {
-                props.toggleEdit()
-                props.toggleFade()
-                }}>Cancel</button>
+
+            <div className="w-full flex justify-end gap-5">
+                <button onClick={() => postEdit()} className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white">
+                    SAVE
+                </button>
+                <button onClick={() => {
+                    props.toggleEdit()
+                    props.toggleFade()
+                }} className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white">
+                    CANCEL
+                </button>
+            </div>
+
         </div>
     )
 }
