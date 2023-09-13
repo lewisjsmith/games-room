@@ -1,9 +1,9 @@
 import express from "express";
 
-import {getGameById, createGame, gameIndex, updateGame, deleteGame, getGamesList, getGamesByStudioId, getGamesByGenreId} from "../controllers/gameController";
-import {getStudioById, getStudios, studioIndex, createStudio, updateStudio, deleteStudio} from "../controllers/studioController";
-import {getGenres, getGenreById, genreIndex, createGenre, updateGenre, deleteGenre} from "../controllers/genreController";
-import {getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameInstance, deleteGameInstance, getGameInstancesList, getGameInstancesByGameId} from "../controllers/gameInstanceController";
+import { getGameById, createGame, updateGame, deleteGame, getGamesList, getGamesByStudioId, getGamesByGenreId } from "../controllers/gameController";
+import { getStudioById, getStudios, createStudio, updateStudio, deleteStudio } from "../controllers/studioController";
+import { getGenres, getGenreById, createGenre, updateGenre, deleteGenre } from "../controllers/genreController";
+import { getGameInstanceById, createGameInstance, gameInstanceIndex, updateGameInstance, deleteGameInstance, getGameInstancesList, getGameInstancesByGameId } from "../controllers/gameInstanceController";
 
 export const router = express.Router();
 
