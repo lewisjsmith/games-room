@@ -17,7 +17,6 @@ function App() {
   const [mobile, setMobile] = useState(true);
 
   useEffect(() => {
-
     const mql = window.matchMedia("(min-width: 700px)").matches;
     setMobile(!mql);
   }, [])
@@ -25,7 +24,12 @@ function App() {
   return (
     <ScreenContext.Provider value={mobile}>
       <div className="position: relative flex w-full h-full">
-        <NavigationMobile />
+        {mobile && (
+          < NavigationMobile />
+        )}
+        {!mobile && (
+          < Navigation />
+        )}
         <div className="h-screen w-full">
           <Routes>
             <Route index element={<Home />} />
