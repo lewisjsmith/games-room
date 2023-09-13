@@ -34,7 +34,7 @@ function App() {
         {mobile && <Hamburger menu={menu} toggleMenu={toggleMenu}/>}
 
         {mobile && menu && (
-          < NavigationMobile />
+          < NavigationMobile toggleMenu={toggleMenu} />
         )}
         
         {!mobile && (
