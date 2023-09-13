@@ -10,26 +10,37 @@ import GenreList from "./components/Genres/GenreList";
 import GenreRoutes from "./routes/GenreRoutes";
 import { ScreenContext } from "./ScreenContext";
 import NavigationMobile from "./components/NavigationMobile";
+import Hamburger from "./components/Hamburger";
 
 
 function App() {
 
   const [mobile, setMobile] = useState(true);
+  const [menu, setMenu] = useState(false);
 
   useEffect(() => {
     const mql = window.matchMedia("(min-width: 700px)").matches;
     setMobile(!mql);
   }, [])
 
+  function toggleMenu(){
+    setMenu(!menu)
+  }
+
   return (
     <ScreenContext.Provider value={mobile}>
       <div className="position: relative flex w-full h-full">
-        {mobile && (
+
+        {mobile && <Hamburger menu={menu} toggleMenu={toggleMenu}/>}
+
+        {mobile && menu && (
           < NavigationMobile />
         )}
+        
         {!mobile && (
           < Navigation />
         )}
+
         <div className="h-screen w-full">
           <Routes>
             <Route index element={<Home />} />
