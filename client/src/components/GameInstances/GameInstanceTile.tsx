@@ -59,16 +59,16 @@ export default function GameInstanceTile(props) {
   }
 
   async function deleteInstance() {
-    const response = await fetch(`/api/v1/library/gameinstances/${_id}`, 
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      }
-    })
+    const response = await fetch(`/api/v1/library/gameinstances/${_id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        }
+      })
 
-    if(response.ok) {
+    if (response.ok) {
       navigate(0);
     } else {
       const json = await response.json();
@@ -77,33 +77,28 @@ export default function GameInstanceTile(props) {
   }
 
   return (
-    <div>
-      {!edit && (
-        <div>
-          <table>
-            <thead>
-              <tr>
-                <td>Status: </td>
-                <td>{localStatus ? localStatus : "Null"}</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Due: </td>
-                <td>{localDue ? localDue : "Null"}</td>
-              </tr>
-            </tbody>
-          </table>
-          <button
-            onClick={() => setEdit(!edit)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Edit
-          </button>
-        </div>
-      )}
+    <div className="w-full flex gap-2">
 
-      {edit && (
+            <span className="font-bold">Status: </span>
+            <span>{localStatus ? localStatus : "Null"}</span>
+            <span className="font-bold">Due: </span>
+            <span>{localDue ? localDue : "Null"}</span>
+
+
+        {/* <button
+          onClick={() => setEdit(!edit)}
+          className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => deleteInstance()}
+          className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white"
+        >
+          Delete
+        </button> */}
+
+      {/* {edit && (
         <div>
           <form action="">
             <label htmlFor="status">Status: </label>
@@ -134,14 +129,7 @@ export default function GameInstanceTile(props) {
             Save
           </button>
         </div>
-      )}
-
-      <button
-        onClick={() => deleteInstance()}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Delete
-      </button>
+      )} */}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function NavigationMobile(props) {
 
   return (
-        <div className="position: absolute w-[calc(100%-5rem)] h-[calc(100%-5rem)] bg-orange-300 rounded-2xl p-5 flex flex-col gap-10 m-10">
+        <div className="position: absolute z-20 w-[calc(100%-5rem)] h-[calc(100%-5rem)] bg-orange-300 rounded-2xl p-5 flex flex-col gap-10 m-10">
           <div>
             <h2 className="w-full font-bold text-2xl drop-shadow-xl shadow-black">Video</h2>
             <h2 className="w-full font-bold text-3xl drop-shadow-xl shadow-black">Games</h2>

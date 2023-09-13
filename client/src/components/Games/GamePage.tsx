@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import GameHandler from "./GameHandler";
 import GameInstanceTile from "../GameInstances/GameInstanceTile";
+import EditWindow from "./EditWindow";
+import InstanceEditWindow from "../GameInstances/InstanceEditWindow";
 
-export default function GamePage() {
+export default function GamePage(props) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -11,8 +13,13 @@ export default function GamePage() {
   const [details, setDetails] = useState({});
   const [gameInstanceList, setGameInstanceList] = useState([]);
 
+  const [instanceId, setInstanceId] = useState("");
+
   const [instanceStatus, setInstanceStatus] = useState("Available");
   const [instanceDate, setInstanceDate] = useState("");
+
+  const [edit, setEdit] = useState(false);
+  const [instanceEdit, setInstanceEdit] = useState(false);
 
   useEffect(() => {
     setGameId(location.pathname.split("/")[2]);
@@ -76,62 +83,63 @@ export default function GamePage() {
     setInstanceDate(e.target.value);
   };
 
+  function toggleEdit() {
+    setEdit(!edit);
+  }
+
+  function toggleInstanceEdit() {
+    setInstanceEdit(!instanceEdit);
+  }
+
   return (
-    <div>
-      <div>
-        <h2 className="font-bold">Game Details</h2>
-        <GameHandler details={details} gameId={gameId} />
+    <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7">
+
+      <div className="w-full">
+        <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
       </div>
 
-      <div>
-        <div>
+      <GameHandler details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade}/>
+      {edit && <EditWindow details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
+
+
+      <div className="position: relative z-10 w-full rounded-xl bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
+
+        <div className="w-full flex justify-between items-center">
           <h2 className="font-bold">Game Instances</h2>
           <button
-            onClick={() => {}}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => { }}
+            className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white"
           >
-            Create
+            CREATE
           </button>
         </div>
-        <ul>
+
+        <ul className="w-full flex flex-col justify-start items-center gap-2 overflow-y-scroll">
           {gameInstanceList.map((gi) => {
             return (
-              <li key={gi._id}>
+              <li key={gi._id} onClick={() => {
+                setInstanceId(gi._id);
+                setInstanceEdit(true);
+                props.toggleFade();
+                }}>
                 <GameInstanceTile details={gi} />
               </li>
             );
           })}
         </ul>
+
       </div>
 
-      <div>
-        <form action="">
-          <h3 className="font-bold">
-            Creating an instance of "{details.title}"
-          </h3>
-          <label htmlFor="status">Status: </label>
-          <select name="status" onChange={handleStatusChange} id="">
-            <option value="Available">Available</option>
-            <option value="Loaned">Loaned</option>
-            <option value="Lost">Lost</option>
-          </select>
-          <label htmlFor="due_back">Due: </label>
-          <input
-            type="date"
-            name="due_back"
-            id=""
-            min="1950-01-01"
-            onChange={handleDateChange}
-          />
-          <button
-            type="button"
-            onClick={() => createInstance()}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Confirm
-          </button>
-        </form>
-      </div>
+      {instanceEdit && (
+        <div>
+          {gameInstanceList.map((gi) => {
+            if (gi._id === instanceId) {
+              return <InstanceEditWindow key={gi._id} toggleInstanceEdit={toggleInstanceEdit} title={details.title} details={gi} toggleFade={props.toggleFade}/>
+            }
+          })}
+        </div>
+      )}
+
     </div>
   );
 }

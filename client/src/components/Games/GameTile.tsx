@@ -7,23 +7,23 @@ export default function GameTile(props) {
     <div>
       <table>
         <thead>
-          <tr>
+          {/* <tr>
             <td>Title: </td>
             <td>{title ? title : "Null"}</td>
+          </tr> */}
+          <tr>
+            <td className="font-bold">Studio: </td>
+            <td>{studio ? studio : "Null"}</td>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Studio: </td>
-            <td>{studio ? studio : "Null"}</td>
-          </tr>
-          <tr>
-            <td>Genre: </td>
+            <td className="font-bold">Genre: </td>
             <td>{genre ? genre : "Null"}</td>
           </tr>
           <tr>
-            <td>Release Date: </td>
-            <td>{releaseDate ? releaseDate : "Null"}</td>
+            <td className="font-bold">Release Date: </td>
+            <td>{releaseDate ? releaseDate.split("T")[0] : "Null"}</td>
           </tr>
         </tbody>
       </table>
