@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "./studio";
 
 const Schema = mongoose.Schema;
 

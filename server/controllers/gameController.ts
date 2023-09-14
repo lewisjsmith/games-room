@@ -20,15 +20,24 @@ export const getGameById = asyncHandler(async (req, res, next) => {
   try {
     const game = await GameModel.find({ _id: req.params.id })
       .select({ __v: 0 })
+      .populate({
+        path: 'studio',
+        select: ["title", "_id"]
+      })
+      .populate({
+        path: 'genre',
+        select: ["title", "_id"]
+      })
       .lean()
       .exec();
 
     if (game.length === 0) {
       res.status(404).json({ errors: "Game not found." });
     } else {
-      res.status(200).json(game[0]);
+      res.status(200).json({...game[0], studio: game[0].studio._id, studioTitle: game[0].studio.title, genre: game[0].genre._id, genreTitle: game[0].genre.title});
     }
   } catch (err) {
+    console.log(err)
     res.status(400).json({ errors: "Invalid URL." });
   }
 });
