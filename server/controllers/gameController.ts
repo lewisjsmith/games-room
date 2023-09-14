@@ -8,17 +8,13 @@ import mongoose from "mongoose";
 // const offset = placeholder.getTimezoneOffset()/60;
 // const d = new Date(1992, 9, 10, -offset)
 
-// export const gameIndex = asyncHandler(async (req, res, next) => {
-//   res.status(400).json({ errors: "Invalid URL." });
-// });
-
 export const getGameById = asyncHandler(async (req, res, next) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(400).json({ errors: "Not a valid ObjectId." });
   }
 
   try {
-    const game = await GameModel.find({ _id: req.params.id })
+    const game = await GameModel.findOne({ _id: req.params.id })
       .select({ __v: 0 })
       .populate({
         path: 'studio',
@@ -31,10 +27,10 @@ export const getGameById = asyncHandler(async (req, res, next) => {
       .lean()
       .exec();
 
-    if (game.length === 0) {
+    if (!game) {
       res.status(404).json({ errors: "Game not found." });
     } else {
-      res.status(200).json({...game[0], studio: game[0].studio._id, studioTitle: game[0].studio.title, genre: game[0].genre._id, genreTitle: game[0].genre.title});
+      res.status(200).json({ ...game, studio: game.studio._id, studioTitle: game.studio.title, genre: game.genre._id, genreTitle: game.genre.title });
     }
   } catch (err) {
     console.log(err)
@@ -152,9 +148,9 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    const instances = await GameInstanceModel.find({game: req.params.id});
-    if(instances.length > 0) {
-      res.status(400).json({errors: "Game can't be deleted whilst it has Game Instances."});
+    const instances = await GameInstanceModel.find({ game: req.params.id });
+    if (instances.length > 0) {
+      res.status(400).json({ errors: "Game can't be deleted whilst it has Game Instances." });
       return;
     }
   } catch (err) {
@@ -165,7 +161,7 @@ export const deleteGame = asyncHandler(async (req, res, next) => {
     const response = await GameModel.findOneAndRemove({ _id: req.params.id });
 
     if (response) {
-      res.status(200).send({message: "Successfully deleted."});
+      res.status(200).send({ message: "Successfully deleted." });
     } else {
       res.status(404).json({ errors: "ID not found." });
       return;
@@ -197,7 +193,7 @@ export const getGamesByStudioId = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    const response = await GameModel.find({studio: req.params.id}).lean().exec();
+    const response = await GameModel.find({ studio: req.params.id }).lean().exec();
 
     if (response) {
       res.status(200).json(response);
@@ -216,7 +212,7 @@ export const getGamesByGenreId = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    const response = await GameModel.find({genre: req.params.id}).lean().exec();
+    const response = await GameModel.find({ genre: req.params.id }).lean().exec();
 
     if (response) {
       res.status(200).json(response);
@@ -229,8 +225,17 @@ export const getGamesByGenreId = asyncHandler(async (req, res, next) => {
 });
 
 interface GameBody {
+  _id?: mongoose.Types.ObjectId;
   title?: string;
   studio?: mongoose.Types.ObjectId;
+  studioTitle?: string;
   genre?: mongoose.Types.ObjectId;
+  genreTitle?: string;
   releaseDate?: Date;
+}
+
+interface StudioBody {
+  __id?: mongoose.Types.ObjectId;
+  title?: string;
+  founded?: Date;
 }
