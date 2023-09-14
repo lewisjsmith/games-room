@@ -1,14 +1,13 @@
 export default function GenreTile(props) {
-
-    const { title } = {...props.details};
+    const { title } = { ...props.details };
 
     return (
-        <div>
-            <table>
+        <div className="w-full">
+            <table className="flex flex-col gap-1">
                 <thead>
-                    <tr>
-                        <td>Title: </td>
-                        <td>{title ? title : null}</td>
+                    <tr className="flex justify-center gap-5">
+                        <td className="font-bold">Title: </td>
+                        <td>{title ? title : "Null"}</td>
                     </tr>
                 </thead>
             </table>

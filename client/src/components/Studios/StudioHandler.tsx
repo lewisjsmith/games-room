@@ -3,13 +3,10 @@ import { useNavigate } from "react-router-dom";
 import StudioTile from "./StudioTile";
 
 export default function StudioHandler(props) {
+  
   const navigate = useNavigate();
 
-  const [edit, setEdit] = useState(false);
-
   const [studioId, setStudioId] = useState("");
-  const [title, setTitle] = useState("");
-  const [founded, setFounded] = useState("");
 
   useEffect(() => {
     if (props.studioId) {
@@ -17,81 +14,39 @@ export default function StudioHandler(props) {
     }
   }, [props.studioId]);
 
-  useEffect(() => {
-    if (props.details.title) {
-      setTitle(props.details.title);
-    }
-  }, [props.details.title]);
-
-  useEffect(() => {
-    if (props.details.founded) {
-      setFounded(props.details.founded.split("T")[0]);
-    }
-  }, [props.details.founded]);
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleFoundedChange = (e) => {
-    setFounded(e.target.value);
-  };
-
-  async function postEdit() {
+  async function deleteStudio() {
     const response = await fetch(`/api/v1/library/studios/${studioId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        title: title,
-        founded: founded,
-      }),
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
     });
 
     if (response.ok) {
-      navigate(0);
+        navigate(`/studios`);
     } else {
-      const json = await response.json();
-      console.log(json);
+        const json = await response.json();
+        console.log(json);
     }
-  }
+}
 
   return (
-    <div>
-      <div>
+    <div className="w-full position: relative z-10">
+      <div className="bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-2">
         <StudioTile details={props.details} />
-        <button onClick={() => setEdit(true)}>Edit</button>
-        <button onClick={() => props.deleteStudio()}>Delete</button>
+        <div className="w-full flex justify-end gap-5">
+          <button onClick={() => {
+            props.toggleEdit()
+            props.toggleFade()
+          }}
+            className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white">
+            EDIT</button>
+          <button onClick={() => deleteStudio()}
+            className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-red-400 text-white">
+            DELETE</button>
+        </div>
       </div>
-
-      {edit &&
-        props.studioId &&
-        props.details.title &&
-        props.details.founded && (
-          <div>
-            <form action="">
-              <label htmlFor="title">Title: </label>
-              <input
-                type="text"
-                name="title"
-                value={title}
-                onChange={handleTitleChange}
-              />
-              <label htmlFor="founded">Founded: </label>
-              <input
-                type="date"
-                name="founded"
-                value={founded}
-                onChange={handleFoundedChange}
-                min="1950-01-01"
-              />
-            </form>
-            <button onClick={() => postEdit()}>Save</button>
-            <button onClick={() => setEdit(false)}>Cancel</button>
-          </div>
-        )}
     </div>
   );
 }

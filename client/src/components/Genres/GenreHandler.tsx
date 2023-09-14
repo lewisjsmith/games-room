@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 import GenreTile from "./GenreTile";
 
 export default function GenreHandler(props) {
+
   const navigate = useNavigate();
 
-  const [edit, setEdit] = useState(false);
-
   const [genreId, setGenreId] = useState("");
-  const [title, setTitle] = useState("");
 
   useEffect(() => {
     if (props.genreId) {
@@ -16,61 +14,39 @@ export default function GenreHandler(props) {
     }
   }, [props.genreId]);
 
-  useEffect(() => {
-    if (props.details.title) {
-      setTitle(props.details.title);
-    }
-  }, [props.details.title]);
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
-  async function postEdit() {
+  async function deleteGenre() {
     const response = await fetch(`/api/v1/library/genres/${genreId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        title: title
-      }),
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
     });
 
     if (response.ok) {
-      navigate(0);
+        navigate(`/genres`);
     } else {
-      const json = await response.json();
-      console.log(json);
+        const json = await response.json();
+        console.log(json);
     }
-  }
+}
 
   return (
-    <div>
-      <div>
-        <GenreTile details={props.details} />
-        <button onClick={() => setEdit(true)}>Edit</button>
-        <button onClick={() => props.deleteGenre()}>Delete</button>
-      </div>
-
-      {edit &&
-        props.genreId &&
-        props.details.title && (
-          <div>
-            <form action="">
-              <label htmlFor="title">Title: </label>
-              <input
-                type="text"
-                name="title"
-                value={title}
-                onChange={handleTitleChange}
-              />
-            </form>
-            <button onClick={() => postEdit()}>Save</button>
-            <button onClick={() => setEdit(false)}>Cancel</button>
+      <div className="w-full position: relative z-10">
+        <div className="bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-2">
+          <GenreTile details={props.details} />
+          <div className="w-full flex justify-end gap-5">
+            <button onClick={() => {
+              props.toggleEdit()
+              props.toggleFade()
+            }}
+              className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white">
+              EDIT</button>
+            <button onClick={() => deleteGenre()}
+              className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-red-400 text-white">
+              DELETE</button>
           </div>
-        )}
-    </div>
-  );
+        </div>
+      </div>
+    );
 }

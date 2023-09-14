@@ -30,7 +30,7 @@ function GameForm() {
                 setFetchStudio(true);
                 try {
                     const keys = Object.keys(map);
-                    if(keys.length > 0) {
+                    if (keys.length > 0) {
                         setFormStudio(map[keys[0]]);
                     }
                 } catch (err) {
@@ -51,7 +51,7 @@ function GameForm() {
                 setFetchGenres(true);
                 try {
                     const keys = Object.keys(map);
-                    if(keys.length > 0) {
+                    if (keys.length > 0) {
                         setFormGenre(map[keys[0]]);
                     }
                 } catch (err) {
@@ -115,29 +115,49 @@ function GameForm() {
 
     return (
 
-        <div>
+        <div className="w-full h-full flex flex-col gap-2 justify-center items-center">
+            {fetchStudio && fetchGenres && (
 
-            {fetchStudio && fetchGenres && <form onSubmit={handleSubmit}>
+                <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-5 bg-slate-400 shadow-lg" onSubmit={handleSubmit}>
 
-                <input name="title" value={formTitle} onChange={handleTitleChange} />
+                    <h1 className="font-bold text-2xl">Register a new game</h1>
 
-                <select name="studio" value={formStudio} onChange={handleStudioChange}>
-                    {Object.keys(studios).map((key) => {
-                        return <option key={key} value={studios[key]}>{key}</option>
-                    })}
-                </select>
+                    <div className="w-full flex justify-between gap-5">
+                        <label htmlFor="title" className="flex justify-center items-center">Title: </label>
+                        <input name="title" value={formTitle} onChange={handleTitleChange} className="w-9/12 border-solid border-2 border-gray-200 pl-4 pr-4 pt-2 pb-2 text-center" />
+                    </div>
 
-                <select name="genre" value={formGenre} onChange={handleGenreChange}>
-                    {Object.keys(genres).map((key) => {
-                        return <option key={key} value={genres[key]}>{key}</option>
-                    })}
-                </select>
+                    <div className="w-full flex justify-between gap-5">
+                        <label htmlFor="studio" className="flex justify-center items-center">Studio: </label>
+                        <select name="studio" value={formStudio} onChange={handleStudioChange} className="w-9/12 text-center">
+                            {Object.keys(studios).map((key) => {
+                                return <option key={key} value={studios[key]}>{key}</option>
+                            })}
+                        </select>
+                    </div>
 
-                <input type="date" name="releaseDate" value={formDate} min="1950-01-01" onChange={handleDateChange} />
+                    <div className="w-full flex justify-between gap-5">
+                        <label htmlFor="genre" className="flex justify-center items-center">Genre: </label>
+                        <select name="genre" value={formGenre} onChange={handleGenreChange} className="w-9/12 text-center">
+                            {Object.keys(genres).map((key) => {
+                                return <option key={key} value={genres[key]}>{key}</option>
+                            })}
+                        </select>
+                    </div>
 
-                <button type="submit">Submit</button>
+                    <div className="w-full flex justify-between gap-5">
+                        <label htmlFor="releaseDate" className="flex justify-center items-center">Released: </label>
+                        <input type="date" name="releaseDate" value={formDate} min="1950-01-01" onChange={handleDateChange} className="w-9/12 text-right" />
+                    </div>
 
-            </form>}
+                    <div>
+                        <button type="submit" className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white">
+                            SUBMIT
+                        </button>
+                    </div>
+
+                </form>
+            )}
 
         </div>
 

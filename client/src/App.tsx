@@ -53,9 +53,9 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/game/*" element={<GameRoutes toggleFade={toggleFade} />} />
             <Route path="/games" element={<GamesList />} />
-            <Route path="/studio/*" element={<StudioRoutes />} />
+            <Route path="/studio/*" element={<StudioRoutes toggleFade={toggleFade}/>} />
             <Route path="/studios" element={<StudiosList />} />
-            <Route path="/genre/*" element={<GenreRoutes />} />
+            <Route path="/genre/*" element={<GenreRoutes toggleFade={toggleFade}/>} />
             <Route path="/genres" element={<GenreList />} />
           </Routes>
         </div>

@@ -37,26 +37,36 @@ export default function StudioForm() {
   };
 
   return (
-    <div>
-      <form action="">
-        <label htmlFor="title">Title: </label>
-        <input
-          type="text"
-          name="title"
-          value={title}
-          onChange={handleTitleChange}
-        />
-        <label htmlFor="founded">Founded: </label>
-        <input
-          type="date"
-          name="founded"
-          value={founded}
-          onChange={handleDateChange}
-          min="1950-01-01"
-        />
-        <button type="button" onClick={() => submitForm()}>
-          Submit
-        </button>
+    <div className="w-full h-full flex flex-col gap-2 justify-center items-center">
+      <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-5 bg-slate-400 shadow-lg" action="">
+        <h1 className="font-bold text-2xl">Register a new studio</h1>
+        <div className="w-full flex justify-between gap-5">
+          <label htmlFor="title" className="flex justify-center items-center">Title: </label>
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={handleTitleChange}
+            className="w-9/12 border-solid border-2 border-gray-200 pl-4 pr-4 pt-2 pb-2 text-center"
+          />
+        </div>
+        <div className="w-full flex justify-between gap-5">
+          <label htmlFor="founded" className="flex justify-center items-center">Founded: </label>
+          <input
+            type="date"
+            name="founded"
+            value={founded}
+            onChange={handleDateChange}
+            min="1950-01-01"
+            className="w-9/12 text-right"
+          />
+        </div>
+        <div>
+          <button type="button" onClick={() => submitForm()}
+          className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white">
+            SUBMIT
+          </button>
+        </div>
       </form>
     </div>
   );

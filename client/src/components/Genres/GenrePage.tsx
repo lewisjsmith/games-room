@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import GenreHandler from "./GenreHandler";
-import GameTile from "../Games/GameTile";
+import EditWindow from "./EditWindow";
 
-export default function GamePage() {
-  const navigate = useNavigate();
+export default function GamePage(props) {
+
   const location = useLocation();
+
   const [genreId, setGenreId] = useState("");
   const [details, setDetails] = useState({});
+
   const [gamesList, setGamesList] = useState([]);
+
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     setGenreId(location.pathname.split("/")[2]);
@@ -38,37 +42,27 @@ export default function GamePage() {
     }
   }, [genreId]);
 
-  async function deleteGenre() {
-    const response = await fetch(`/api/v1/library/genres/${genreId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-
-    if (response.ok) {
-      navigate(`/genres`);
-    } else {
-      const json = await response.json();
-      console.log(json);
-    }
+  function toggleEdit() {
+    setEdit(!edit);
   }
 
   return (
-    <div>
-      <div>
-        <h2 className="font-bold">Genre Details</h2>
-        <GenreHandler details={details} genreId={genreId} deleteGenre={deleteGenre}/>
+    <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7">
+
+      <div className="w-full">
+        <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
       </div>
 
-      <div>
-        <h2 className="font-bold">Games released:</h2>
-        <ul>
+      <GenreHandler details={details} studioId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade}/>
+      {edit && <EditWindow details={details} studioId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
+
+      <div className="position: relative z-10 w-full rounded-xl bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
+        <ul className="w-full flex flex-col justify-start items-center gap-2 overflow-y-scroll">
+          <h2 className="font-bold">Games released:</h2>
           {gamesList.map((game) => {
             return (
               <li key={game._id}>
-                <GameTile details={game} />
+                <Link to={`/game/${game._id}`}><h3>{game.title}</h3></Link>
               </li>
             );
           })}
