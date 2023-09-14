@@ -11,4 +11,4 @@ To-do:
 - Tackle typescript errors (Complex)
 
 Used technologies:
-Typescript, NodeJS, Express, React, Tailwind CSS, MongoDB, Figma (design and wireframing)
+Typescript, NodeJS, Express, React, Tailwind CSS, MongoDB, Figma (design and wireframing), Jest, Supertest

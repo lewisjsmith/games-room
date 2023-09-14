@@ -15,7 +15,7 @@ export default function GamesList() {
 
   return (
 
-    <div className="w-full h-full flex flex-col justify-start items-center mt-1 p-5 gap-10">
+    <div className="w-full h-full flex flex-col justify-start items-center p-5 gap-10 bg-list-bkg bg-cover bg-center">
       <div className="w-full">
         <h1 className="w-full text-left text-5xl font-bold">Studios</h1>
       </div>

@@ -98,7 +98,7 @@ export default function GamePage(props) {
   }
 
   return (
-    <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7">
+    <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7 bg-game-bkg bg-cover bg-left">
 
       <div className="w-full">
         <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
