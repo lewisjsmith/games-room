@@ -15,7 +15,7 @@ export default function GamesList() {
   return (
     <div className="w-full h-full flex flex-col justify-start items-center mt-1 p-5 gap-10">
       <div className="w-full">
-        <h1 className="w-full text-left text-5xl">Games</h1>
+        <h1 className="w-full text-left text-5xl font-bold">Games</h1>
       </div>
       <div className="h-full w-full p-5">
         <ul className="h-full w-full rounded-xl bg-opacity-5 bg-slate-400 shadow-lg pt-5 flex flex-col justify-start items-center gap-2 overflow-y-scroll">
