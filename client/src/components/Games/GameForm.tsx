@@ -115,7 +115,7 @@ function GameForm() {
 
     return (
 
-        <div className="w-full h-full flex flex-col gap-2 justify-center items-center">
+        <div className="w-full h-full flex flex-col gap-2 justify-center items-center bg-game-bkg bg-cover bg-left">
             {fetchStudio && fetchGenres && (
 
                 <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-5 bg-slate-400 shadow-lg" onSubmit={handleSubmit}>

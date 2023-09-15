@@ -31,7 +31,7 @@ export default function GenreForm() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-2 justify-center items-center">
+    <div className="w-full h-full flex flex-col gap-2 justify-center items-center bg-game-bkg bg-cover bg-left">
       <form action="" className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-5 bg-slate-400 shadow-lg">
         <h1 className="font-bold text-2xl">Register a new genre</h1>
         <div className="w-full flex justify-between gap-5">
