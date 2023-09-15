@@ -189,7 +189,7 @@ export default function EditWindow(props) {
             </form>
 
             <div className="w-full flex justify-end gap-5">
-                <button onClick={() => postEdit()} className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white">
+                <button onClick={() => postEdit()} className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 hover:bg-emerald-500 text-white">
                     SAVE
                 </button>
                 <button onClick={() => {

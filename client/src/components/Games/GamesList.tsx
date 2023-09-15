@@ -17,14 +17,14 @@ export default function GamesList() {
       <div className="w-full">
         <h1 className="w-full text-left text-5xl font-bold">Games</h1>
       </div>
-      <div className="h-full w-full p-5">
-        <ul className="h-full w-full rounded-xl bg-opacity-5 bg-slate-400 shadow-lg pt-5 flex flex-col justify-start items-center gap-2 overflow-y-scroll">
+      <div className="h-full w-full p-5 flex justify-center">
+        <ul className="h-full w-auto rounded-xl bg-gray-50 shadow-2xl p-5 flex flex-col justify-start items-start gap-2 overflow-y-scroll">
           {gamesList.length === 0 && <li className="w-full text-center" key={"null-result"}><h2>No games found.</h2></li>}
           {gamesList.map((game) => {
             return (
               <li className="w-full text-center" key={game._id}>
-                <Link to={`/game/${game._id}`}>
-                  <button>{game.title}</button>
+                <Link to={`/game/${game._id}`} className="w-full">
+                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{game.title}</button>
                 </Link>
               </li>
             );

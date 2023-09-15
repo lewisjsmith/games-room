@@ -56,7 +56,7 @@ export default function GamePage(props) {
       <GenreHandler details={details} studioId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade}/>
       {edit && <EditWindow details={details} studioId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
 
-      <div className="position: relative z-10 w-full rounded-xl bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
+      <div className="position: relative z-10 w-full rounded-lg bg-gray-50 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
         <ul className="w-full flex flex-col justify-start items-center gap-2 overflow-y-scroll">
           <h2 className="font-bold">Games released:</h2>
           {gamesList.map((game) => {

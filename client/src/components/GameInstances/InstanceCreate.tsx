@@ -83,7 +83,7 @@ export default function InstanceCreate(props) {
                             props.toggleInstanceCreate()
                             props.toggleFade()
                         }}
-                        className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white"
+                        className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 hover:bg-emerald-500 text-white"
                     >
                         SAVE
                     </button>
@@ -93,7 +93,7 @@ export default function InstanceCreate(props) {
                             props.toggleInstanceCreate()
                             props.toggleFade();
                         }}
-                        className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 text-white"
+                        className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-blue-400 hover:bg-blue-500 text-white"
                     >
                         CANCEL
                     </button>

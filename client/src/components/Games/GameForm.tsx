@@ -124,7 +124,7 @@ function GameForm() {
 
                     <div className="w-full flex justify-between gap-5">
                         <label htmlFor="title" className="flex justify-center items-center">Title: </label>
-                        <input name="title" value={formTitle} onChange={handleTitleChange} className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center" />
+                        <input name="title" value={formTitle} onChange={handleTitleChange} className="w-9/12 text-gray-900 border  border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center" />
                     </div>
 
                     <div className="w-full flex justify-between gap-5">
@@ -151,7 +151,7 @@ function GameForm() {
                     </div>
 
                     <div>
-                        <button type="submit" className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white">
+                        <button type="submit" className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 hover:bg-emerald-500 text-white">
                             SUBMIT
                         </button>
                     </div>

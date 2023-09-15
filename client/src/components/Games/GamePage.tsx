@@ -108,16 +108,16 @@ export default function GamePage(props) {
       {edit && <EditWindow details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
 
 
-      <div className="position: relative z-10 w-full rounded-xl bg-opacity-5 bg-slate-400 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
+      <div className="position: relative z-10 w-full rounded-xl bg-gray-50 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
 
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center ">
           <h2 className="font-bold">Game Instances</h2>
           <button
             onClick={() => {
               setInstanceCreate(true)
               props.toggleFade()
             }}
-            className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 text-white"
+            className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 hover:bg-emerald-500 text-white"
           >
             CREATE
           </button>
