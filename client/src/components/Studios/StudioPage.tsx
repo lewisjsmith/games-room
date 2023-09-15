@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import EditWindow from "./EditWindow";
 import StudioHandler from "./StudioHandler";
 
 export default function StudioPage(props) {
+
+  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -22,7 +24,11 @@ export default function StudioPage(props) {
     if (studioId !== "") {
       fetch(`/api/v1/library/studios/${studioId}`)
         .then((res) => {
-          return res.json();
+          if (res.status === 400) {
+            navigate("/error");
+          } else {
+            return res.json();
+          }
         })
         .then((data) => {
           setDetails(data);
@@ -53,7 +59,7 @@ export default function StudioPage(props) {
         <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
       </div>
 
-      <StudioHandler details={details} studioId={studioId} toggleEdit={toggleEdit} toggleFade={props.toggleFade}/>
+      <StudioHandler details={details} studioId={studioId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />
       {edit && <EditWindow details={details} studioId={studioId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
 
       <div className="position: relative z-10 w-full rounded-lg bg-gray-50 shadow-lg p-5 flex flex-col justify-center items-center gap-5">

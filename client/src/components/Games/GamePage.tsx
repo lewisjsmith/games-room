@@ -31,7 +31,12 @@ export default function GamePage(props) {
     if (gameId !== "") {
       fetch(`/api/v1/library/games/${gameId}`)
         .then((res) => {
-          return res.json();
+          if (res.status === 400) {
+            navigate("/error")
+          } else {
+            return res.json();
+          }
+
         })
         .then((data) => {
           setDetails(data);
@@ -104,7 +109,7 @@ export default function GamePage(props) {
         <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
       </div>
 
-      <GameHandler details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade}/>
+      <GameHandler details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />
       {edit && <EditWindow details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
 
 
@@ -130,7 +135,7 @@ export default function GamePage(props) {
                 setInstanceId(gi._id);
                 setInstanceEdit(true);
                 props.toggleFade();
-                }}>
+              }}>
                 <GameInstanceTile details={gi} />
               </li>
             );
@@ -141,7 +146,7 @@ export default function GamePage(props) {
 
       {instanceCreate && (
         <div>
-          <InstanceCreate toggleInstanceCreate={toggleInstanceCreate} details={details} toggleFade={props.toggleFade}/>
+          <InstanceCreate toggleInstanceCreate={toggleInstanceCreate} details={details} toggleFade={props.toggleFade} />
         </div>
       )}
 
@@ -149,7 +154,7 @@ export default function GamePage(props) {
         <div>
           {gameInstanceList.map((gi) => {
             if (gi._id === instanceId) {
-              return <InstanceEditWindow key={gi._id} toggleInstanceEdit={toggleInstanceEdit} title={details.title} details={gi} toggleFade={props.toggleFade}/>
+              return <InstanceEditWindow key={gi._id} toggleInstanceEdit={toggleInstanceEdit} title={details.title} details={gi} toggleFade={props.toggleFade} />
             }
           })}
         </div>

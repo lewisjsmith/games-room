@@ -2,9 +2,9 @@
 Inventory management for a fictional games rental company.
 
 To-do:
+- 404 page styling
 - Directory tidy for client-side code
-- 404 page
-- Test deployment, docker packaging, env variable hiding
+- Test deployment, docker packaging, env variable hiding, remove/disable logging
 - GitHub documentation
 - Tackle typescript errors (Complex)
 

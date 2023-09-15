@@ -11,6 +11,7 @@ import GenreRoutes from "./routes/GenreRoutes";
 import { ScreenContext } from "./ScreenContext";
 import NavigationMobile from "./components/NavigationMobile";
 import Hamburger from "./components/Hamburger";
+import ErrorPage from "./components/ErrorPage";
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
             <Route path="/studios" element={<StudiosList />} />
             <Route path="/genre/*" element={<GenreRoutes toggleFade={toggleFade}/>} />
             <Route path="/genres" element={<GenreList />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
       </div>
