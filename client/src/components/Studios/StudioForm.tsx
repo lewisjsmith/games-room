@@ -38,7 +38,7 @@ export default function StudioForm() {
 
   return (
     <div className="w-full h-full flex flex-col gap-2 justify-center items-center bg-game-bkg bg-cover bg-left">
-      <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-5 bg-slate-400 shadow-lg" action="">
+      <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-1 bg-gray-50 shadow-2xl" action="">
         <h1 className="font-bold text-2xl">Register a new studio</h1>
         <div className="w-full flex justify-between gap-5">
           <label htmlFor="title" className="flex justify-center items-center">Title: </label>
@@ -47,7 +47,7 @@ export default function StudioForm() {
             name="title"
             value={title}
             onChange={handleTitleChange}
-            className="w-9/12 border-solid border-2 border-gray-200 pl-4 pr-4 pt-2 pb-2 text-center"
+            className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center"
           />
         </div>
         <div className="w-full flex justify-between gap-5">
@@ -58,7 +58,7 @@ export default function StudioForm() {
             value={founded}
             onChange={handleDateChange}
             min="1950-01-01"
-            className="w-9/12 text-right"
+            className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center"
           />
         </div>
         <div>

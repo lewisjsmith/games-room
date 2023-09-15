@@ -118,18 +118,18 @@ function GameForm() {
         <div className="w-full h-full flex flex-col gap-2 justify-center items-center bg-game-bkg bg-cover bg-left">
             {fetchStudio && fetchGenres && (
 
-                <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-5 bg-slate-400 shadow-lg" onSubmit={handleSubmit}>
+                <form className="flex flex-col w-10/12 justify-center items-center gap-5 p-5 rounded-2xl bg-opacity-1 bg-gray-50 shadow-2xl" onSubmit={handleSubmit}>
 
                     <h1 className="font-bold text-2xl">Register a new game</h1>
 
                     <div className="w-full flex justify-between gap-5">
                         <label htmlFor="title" className="flex justify-center items-center">Title: </label>
-                        <input name="title" value={formTitle} onChange={handleTitleChange} className="w-9/12 border-solid border-2 border-gray-200 pl-4 pr-4 pt-2 pb-2 text-center" />
+                        <input name="title" value={formTitle} onChange={handleTitleChange} className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center" />
                     </div>
 
                     <div className="w-full flex justify-between gap-5">
                         <label htmlFor="studio" className="flex justify-center items-center">Studio: </label>
-                        <select name="studio" value={formStudio} onChange={handleStudioChange} className="w-9/12 text-center">
+                        <select name="studio" value={formStudio} onChange={handleStudioChange} className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center">
                             {Object.keys(studios).map((key) => {
                                 return <option key={key} value={studios[key]}>{key}</option>
                             })}
@@ -138,7 +138,7 @@ function GameForm() {
 
                     <div className="w-full flex justify-between gap-5">
                         <label htmlFor="genre" className="flex justify-center items-center">Genre: </label>
-                        <select name="genre" value={formGenre} onChange={handleGenreChange} className="w-9/12 text-center">
+                        <select name="genre" value={formGenre} onChange={handleGenreChange} className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center">
                             {Object.keys(genres).map((key) => {
                                 return <option key={key} value={genres[key]}>{key}</option>
                             })}
@@ -147,7 +147,7 @@ function GameForm() {
 
                     <div className="w-full flex justify-between gap-5">
                         <label htmlFor="releaseDate" className="flex justify-center items-center">Released: </label>
-                        <input type="date" name="releaseDate" value={formDate} min="1950-01-01" onChange={handleDateChange} className="w-9/12 text-right" />
+                        <input type="date" name="releaseDate" value={formDate} min="1950-01-01" onChange={handleDateChange} className="w-9/12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50pl-4 pr-4 pt-2 pb-2 text-center" />
                     </div>
 
                     <div>
