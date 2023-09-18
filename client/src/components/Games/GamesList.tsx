@@ -22,9 +22,9 @@ export default function GamesList() {
           {gamesList.length === 0 && <li className="w-full text-center" key={"null-result"}><h2>No games found.</h2></li>}
           {gamesList.map((game) => {
             return (
-              <li className="w-full text-center" key={game._id}>
-                <Link to={`/game/${game._id}`} className="w-full">
-                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{game.title}</button>
+              <li className="w-full text-center" key={game["_id"]}>
+                <Link to={`/game/${game["_id"]}`} className="w-full">
+                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{game["title"]}</button>
                 </Link>
               </li>
             );

@@ -1,7 +1,7 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import Navigation from "./components/Navigation";
+import Home from "./components/Navigation/Home";
+import Navigation from "./components/Navigation/Navigation";
 import GameRoutes from "./routes/GameRoutes";
 import GamesList from "./components/Games/GamesList";
 import StudioRoutes from "./routes/StudioRoutes";
@@ -9,9 +9,9 @@ import StudiosList from "./components/Studios/StudiosList";
 import GenreList from "./components/Genres/GenreList";
 import GenreRoutes from "./routes/GenreRoutes";
 import { ScreenContext } from "./ScreenContext";
-import NavigationMobile from "./components/NavigationMobile";
-import Hamburger from "./components/Hamburger";
-import ErrorPage from "./components/ErrorPage";
+import NavigationMobile from "./components/Navigation/NavigationMobile";
+import Hamburger from "./components/Navigation/Hamburger";
+import ErrorPage from "./components/Navigation/ErrorPage";
 
 
 function App() {

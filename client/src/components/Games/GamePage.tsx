@@ -6,18 +6,15 @@ import EditWindow from "./EditWindow";
 import InstanceEditWindow from "../GameInstances/InstanceEditWindow";
 import InstanceCreate from "../GameInstances/InstanceCreate";
 
-export default function GamePage(props) {
+export default function GamePage(props: FadeFunction) {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [gameId, setGameId] = useState("");
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState<detailsStructure | undefined>(undefined);
   const [gameInstanceList, setGameInstanceList] = useState([]);
 
   const [instanceId, setInstanceId] = useState("");
-
-  const [instanceStatus, setInstanceStatus] = useState("Available");
-  const [instanceDate, setInstanceDate] = useState("");
 
   const [edit, setEdit] = useState(false);
   const [instanceEdit, setInstanceEdit] = useState(false);
@@ -56,40 +53,6 @@ export default function GamePage(props) {
     }
   }, [gameId]);
 
-  async function createInstance() {
-    const response = await fetch("/api/v1/library/gameinstances", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        game: gameId,
-        status: instanceStatus,
-        due_back: instanceDate,
-      }),
-    });
-
-    if (response.ok) {
-      console.log({
-        game: gameId,
-        status: instanceStatus,
-        due_back: instanceDate,
-      });
-    } else {
-      const json = await response.json();
-      console.log(json);
-    }
-  }
-
-  const handleStatusChange = (e) => {
-    setInstanceStatus(e.target.value);
-  };
-
-  const handleDateChange = (e) => {
-    setInstanceDate(e.target.value);
-  };
-
   function toggleEdit() {
     setEdit(!edit);
   }
@@ -106,7 +69,7 @@ export default function GamePage(props) {
     <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7 bg-game-bkg bg-cover bg-left">
 
       <div className="w-full">
-        <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
+        <h1 className="w-full text-left text-3xl font-bold">{details ? details["title"] : "Null" }</h1>
       </div>
 
       <GameHandler details={details} gameId={gameId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />
@@ -131,8 +94,8 @@ export default function GamePage(props) {
         <ul className="w-full flex flex-col justify-start items-center gap-2 overflow-y-scroll">
           {gameInstanceList.map((gi) => {
             return (
-              <li key={gi._id} className="w-full" onClick={() => {
-                setInstanceId(gi._id);
+              <li key={gi["_id"]} className="w-full" onClick={() => {
+                setInstanceId(gi["_id"]);
                 setInstanceEdit(true);
                 props.toggleFade();
               }}>
@@ -153,8 +116,8 @@ export default function GamePage(props) {
       {instanceEdit && (
         <div>
           {gameInstanceList.map((gi) => {
-            if (gi._id === instanceId) {
-              return <InstanceEditWindow key={gi._id} toggleInstanceEdit={toggleInstanceEdit} title={details.title} details={gi} toggleFade={props.toggleFade} />
+            if (gi["_id"] === instanceId) {
+              return <InstanceEditWindow key={gi["_id"]} toggleInstanceEdit={toggleInstanceEdit} title={details ? details["title"] : "Null"} details={gi} toggleFade={props.toggleFade} />
             }
           })}
         </div>
@@ -162,4 +125,18 @@ export default function GamePage(props) {
 
     </div>
   );
+}
+
+interface FadeFunction {
+  toggleFade: ()=> void
+}
+
+interface detailsStructure {
+  _id: string,
+  title: string,
+  studio: string,
+  studioTitle: string,
+  genre: string,
+  genreTitle: string,
+  releaseDate: string
 }

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import home from "../public/assets/home.svg"
+import home from "../../public/assets/home.svg"
 
-export default function NavigationMobile(props) {
+export default function NavigationMobile(props: IMobile) {
 
   return (
     <div className="position: absolute z-20 w-[calc(100%-5rem)] h-[calc(100%-5rem)] bg-orange-300 rounded-2xl p-5 flex flex-col gap-10 m-10">
@@ -32,4 +32,8 @@ export default function NavigationMobile(props) {
     </div>
 
   );
+}
+
+interface IMobile {
+  toggleMenu: () => void
 }

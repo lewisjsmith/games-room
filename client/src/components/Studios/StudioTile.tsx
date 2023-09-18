@@ -1,5 +1,6 @@
-export default function StudioTile(props) {
-  const { title, founded } = { ...props.details };
+export default function StudioTile(props: tileProps) {
+
+  const { title, founded } = props ? { ...props.details } : { title: null, founded: null };
 
   return (
     <div className="w-full">
@@ -19,4 +20,14 @@ export default function StudioTile(props) {
       </table>
     </div>
   );
+}
+
+interface detailsStructure {
+  _id: string,
+  title: string,
+  founded: string
+}
+
+interface tileProps {
+  details: detailsStructure | undefined
 }

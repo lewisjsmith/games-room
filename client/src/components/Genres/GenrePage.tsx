@@ -3,14 +3,14 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import GenreHandler from "./GenreHandler";
 import EditWindow from "./EditWindow";
 
-export default function GamePage(props) {
+export default function GamePage(props: FadeFunction) {
 
   const navigate = useNavigate();
 
   const location = useLocation();
 
   const [genreId, setGenreId] = useState("");
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState<detailsStructure | undefined>(undefined);
 
   const [gamesList, setGamesList] = useState([]);
 
@@ -56,19 +56,19 @@ export default function GamePage(props) {
     <div className="position: relative w-full h-full flex flex-col justify-start items-center p-5 gap-7 bg-game-bkg bg-cover bg-left">
 
       <div className="w-full">
-        <h1 className="w-full text-left text-3xl font-bold">{details.title}</h1>
+        <h1 className="w-full text-left text-3xl font-bold">{details ? details["title"] : "Null" }</h1>
       </div>
 
-      <GenreHandler details={details} studioId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />
-      {edit && <EditWindow details={details} studioId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
+      <GenreHandler details={details} genreId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />
+      {edit && <EditWindow details={details} genreId={genreId} toggleEdit={toggleEdit} toggleFade={props.toggleFade} />}
 
       <div className="position: relative z-10 w-full rounded-lg bg-gray-50 shadow-lg p-5 flex flex-col justify-center items-center gap-5">
         <ul className="w-full flex flex-col justify-start items-center gap-2 overflow-y-scroll">
           <h2 className="font-bold">Games released:</h2>
           {gamesList.map((game) => {
             return (
-              <li key={game._id}>
-                <Link to={`/game/${game._id}`}><h3>{game.title}</h3></Link>
+              <li key={game["_id"]}>
+                <Link to={`/game/${game["_id"]}`}><h3>{game["title"]}</h3></Link>
               </li>
             );
           })}
@@ -77,3 +77,13 @@ export default function GamePage(props) {
     </div>
   );
 }
+
+interface FadeFunction {
+  toggleFade: ()=> void
+}
+
+interface detailsStructure {
+  _id: string,
+  title: string
+}
+

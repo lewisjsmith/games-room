@@ -1,18 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function InstanceEditWindow(props) {
+export default function InstanceEditWindow(props: IHandler) {
 
     const navigate = useNavigate();
 
-    const [localStatus, setLocalStatus] = useState("");
+    const [localStatus, setLocalStatus] =  useState<string | undefined | null>(null);
     const [localDue, setLocalDue] = useState("");
     const [formBody, setFormBody] = useState({});
 
-    const { _id, status, due_back } = { ...props.details };
+    const { _id, status, due_back } = props ? { ...props.details } : { _id: null, status: null, due_back: null };
+    const title = props.title ? props.title : "Null";
 
     useEffect(() => {
-        setLocalStatus(status);
+        if (props.details && props.details.status) { 
+            setLocalStatus(status); 
+        }
         if (due_back) {
             setLocalDue(due_back.split("T")[0]);
         }
@@ -25,11 +28,11 @@ export default function InstanceEditWindow(props) {
         });
     }, [localStatus, localDue]);
 
-    const handleStatusChange = (e) => {
+    const handleStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setLocalStatus(e.target.value);
     };
 
-    const handleDueChange = (e) => {
+    const handleDueChange = (e: ChangeEvent<HTMLInputElement>) => {
         setLocalDue(e.target.value);
     };
 
@@ -79,7 +82,7 @@ export default function InstanceEditWindow(props) {
         <div className="position: absolute top-2/4 left-2/4 w-5/6 -translate-x-2/4 -translate-y-2/4 z-50 bg-white shadow-lg p-5 flex flex-col justify-center items-center gap-5 rounded-xl">
             <form action="" className="flex flex-col gap-5">
                 <h3 className="font-bold">
-                    Creating an instance of "{props.title}"
+                    Creating an instance of "{title}"
                 </h3>
                 <div className="flex justify-between gap-5">
                     <label htmlFor="status">Status: </label>
@@ -138,4 +141,17 @@ export default function InstanceEditWindow(props) {
             </form>
         </div>
     )
+}
+
+interface IHandler {
+    details: detailsStructure | undefined,
+    toggleInstanceEdit: () => void,
+    toggleFade: () => void,
+    title: string
+}
+
+interface detailsStructure {
+    _id: string,
+    status: string,
+    due_back: string
 }

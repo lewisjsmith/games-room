@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function EditWindow(props) {
+export default function EditWindow(props: IHandler) {
 
     const navigate = useNavigate();
 
@@ -9,18 +9,18 @@ export default function EditWindow(props) {
     const [title, setTitle] = useState("");
 
     useEffect(() => {
-        if (props.studioId) {
-            setGenreid(props.studioId);
+        if (props.genreId) {
+            setGenreid(props.genreId);
         }
-    }, [props.studioId]);
+    }, [props.genreId]);
 
     useEffect(() => {
-        if (props.details.title) {
+        if (props.details && props.details.title) {
             setTitle(props.details.title);
         }
-    }, [props.details.title]);
+    }, [props.details]);
 
-    const handleTitleChange = (e) => {
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
 
@@ -71,3 +71,15 @@ export default function EditWindow(props) {
         </div>
     )
 }
+
+interface IHandler {
+    details: detailsStructure | undefined,
+    genreId: string,
+    toggleEdit: ()=> void,
+    toggleFade: ()=> void
+  }
+  
+  interface detailsStructure {
+    _id: string,
+    title: string,
+  }

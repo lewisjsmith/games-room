@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import StudioTile from "./StudioTile";
 
 export default function GamesList() {
   const [studiosList, setStudiosList] = useState([]);
@@ -24,9 +23,9 @@ export default function GamesList() {
           {studiosList.length === 0 && <li className="w-full text-center"key={"null-result"}><h2>No studios found.</h2></li>}
           {studiosList.map((studio) => {
             return (
-              <li className="w-full text-center" key={studio._id}>
-                <Link to={`/studio/${studio._id}`} className="w-full">
-                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{studio.title}</button>
+              <li className="w-full text-center" key={studio["_id"]}>
+                <Link to={`/studio/${studio["_id"]}`} className="w-full">
+                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{studio["title"]}</button>
                 </Link>
               </li>
             );

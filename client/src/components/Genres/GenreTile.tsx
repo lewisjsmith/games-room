@@ -1,5 +1,5 @@
-export default function GenreTile(props) {
-    const { title } = { ...props.details };
+export default function GenreTile(props: tileProps) {
+    const { title } = props ? { ...props.details } : { title: null };
 
     return (
         <div className="w-full">
@@ -14,3 +14,12 @@ export default function GenreTile(props) {
         </div>
     );
 }
+
+interface detailsStructure {
+    _id: string,
+    title: string,
+  }
+
+  interface tileProps {
+    details: detailsStructure | undefined
+  }

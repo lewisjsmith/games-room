@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function InstanceCreate(props) {
+export default function InstanceCreate(props: ICreate) {
 
     const navigate = useNavigate();
 
@@ -17,11 +17,11 @@ export default function InstanceCreate(props) {
         })
     }, [localStatus, localDue]);
 
-    const handleStatusChange = (e) => {
+    const handleStatusChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setLocalStatus(e.target.value);
     };
 
-    const handleDueChange = (e) => {
+    const handleDueChange = (e: ChangeEvent<HTMLInputElement>) => {
         setLocalDue(e.target.value);
     };
 
@@ -35,7 +35,7 @@ export default function InstanceCreate(props) {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                     },
-                    body: JSON.stringify({game: props.details._id,  ...formBody}),
+                    body: JSON.stringify({ game: props.details._id, ...formBody }),
                 }
             );
 
@@ -101,4 +101,16 @@ export default function InstanceCreate(props) {
             </form>
         </div>
     )
+}
+
+interface detailsStructure {
+    _id: string
+    title: string, 
+
+}
+
+interface ICreate {
+    details: detailsStructure,
+    toggleInstanceCreate: () => void,
+    toggleFade: () => void
 }

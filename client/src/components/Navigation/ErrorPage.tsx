@@ -1,4 +1,4 @@
-import searchError from "../public/assets/searcherror.svg";
+import searchError from "../../public/assets/searcherror.svg";
 
 export default function ErrorPage() {
 

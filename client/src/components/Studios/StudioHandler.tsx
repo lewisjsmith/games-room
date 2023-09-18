@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StudioTile from "./StudioTile";
 
-export default function StudioHandler(props) {
+export default function StudioHandler(props: IHandler) {
   
   const navigate = useNavigate();
 
@@ -50,3 +50,17 @@ export default function StudioHandler(props) {
     </div>
   );
 }
+
+interface IHandler {
+  details: detailsStructure | undefined,
+  studioId: string,
+  toggleEdit: ()=> void,
+  toggleFade: ()=> void
+}
+
+interface detailsStructure {
+  _id: string,
+  title: string,
+  founded: string
+}
+

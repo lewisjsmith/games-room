@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import GameTile from "./GameTile";
 
-export default function GameHandler(props) {
+export default function GameHandler(props: IHandler) {
   const navigate = useNavigate();
 
   const [gameId, setGameId] = useState("");
@@ -49,3 +49,21 @@ export default function GameHandler(props) {
     </div>
   );
 }
+
+interface IHandler {
+  details: detailsStructure | undefined,
+  gameId: string,
+  toggleEdit: ()=> void,
+  toggleFade: ()=> void
+}
+
+interface detailsStructure {
+  _id: string,
+  title: string,
+  studio: string,
+  studioTitle: string,
+  genre: string,
+  genreTitle: string,
+  releaseDate: string
+}
+

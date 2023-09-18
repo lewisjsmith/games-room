@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function EditWindow(props) {
+export default function EditWindow(props: IHandler) {
 
     const navigate = useNavigate();
-
-    const [edit, setEdit] = useState(false);
 
     const [studios, setStudios] = useState({});
     const [genres, setGenres] = useState({});
@@ -23,28 +21,28 @@ export default function EditWindow(props) {
     }, [props.gameId]);
 
     useEffect(() => {
-        if (props.details.title) {
+        if (props.details && props.details.title) {
             setTitle(props.details.title);
         }
-    }, [props.details.title]);
+    }, [props.details]);
 
     useEffect(() => {
-        if (props.details.studio) {
+        if (props.details && props.details.studio) {
             setStudio(props.details.studio);
         }
-    }, [props.details.studio]);
+    }, [props.details]);
 
     useEffect(() => {
-        if (props.details.genre) {
+        if (props.details && props.details.genre) {
             setGenre(props.details.genre);
         }
-    }, [props.details.genre]);
+    }, [props.details]);
 
     useEffect(() => {
-        if (props.details.releaseDate) {
+        if (props.details && props.details.releaseDate) {
             setReleaseDate(props.details.releaseDate.split("T")[0]);
         }
-    }, [props.details.releaseDate]);
+    }, [props.details]);
 
     useEffect(() => {
         fetch("/api/v1/library/studios", { mode: "cors" })
@@ -52,7 +50,7 @@ export default function EditWindow(props) {
             .then((data) => {
                 const map = {};
                 for (let i = 0; i < data.length; i++) {
-                    map[data[i].title] = data[i]["_id"];
+                    map[data[i]["title"]] = data[i]["_id"];
                 }
                 setStudios({ ...map });
                 try {
@@ -72,7 +70,7 @@ export default function EditWindow(props) {
             .then((data) => {
                 const map = {};
                 for (let i = 0; i < data.length; i++) {
-                    map[data[i].title] = data[i]["_id"];
+                    map[data[i]["title"]] = data[i]["_id"];
                 }
                 setGenres({ ...map });
                 try {
@@ -86,19 +84,19 @@ export default function EditWindow(props) {
             });
     }, []);
 
-    const handleTitleChange = (e) => {
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
 
-    const handleStudioChange = (e) => {
+    const handleStudioChange = (e: ChangeEvent<HTMLInputElement>) => {
         setStudio(e.target.value);
     };
 
-    const handleGenreChange = (e) => {
+    const handleGenreChange = (e: ChangeEvent<HTMLInputElement>) => {
         setGenre(e.target.value);
     };
 
-    const handleReleaseDateChange = (e) => {
+    const handleReleaseDateChange = (e: ChangeEvent<HTMLInputElement>) => {
         setReleaseDate(e.target.value);
     };
 
@@ -120,23 +118,6 @@ export default function EditWindow(props) {
         if (response.ok) {
             props.toggleFade();
             navigate(0);
-        } else {
-            const json = await response.json();
-            console.log(json);
-        }
-    }
-
-    async function deleteGame() {
-        const response = await fetch(`/api/v1/library/games/${gameId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-        });
-
-        if (response.ok) {
-            navigate(`/games`);
         } else {
             const json = await response.json();
             console.log(json);
@@ -203,3 +184,20 @@ export default function EditWindow(props) {
         </div>
     )
 }
+
+interface IHandler {
+    details: detailsStructure | undefined,
+    gameId: string,
+    toggleEdit: ()=> void,
+    toggleFade: ()=> void
+  }
+
+interface detailsStructure {
+    _id: string,
+    title: string,
+    studio: string,
+    studioTitle: string,
+    genre: string,
+    genreTitle: string,
+    releaseDate: string
+  }

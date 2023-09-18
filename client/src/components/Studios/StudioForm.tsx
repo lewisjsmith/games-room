@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function StudioForm() {
@@ -7,12 +7,17 @@ export default function StudioForm() {
   const [title, setTitle] = useState("");
   const [founded, setFounded] = useState("");
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target) {
+      setTitle(e.target.value);
+    }
+
   };
 
-  const handleDateChange = (e) => {
-    setFounded(e.target.value);
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target) {
+      setFounded(e.target.value);
+    }
   };
 
   const submitForm = async () => {
@@ -63,7 +68,7 @@ export default function StudioForm() {
         </div>
         <div>
           <button type="button" onClick={() => submitForm()}
-          className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 hover:bg-emerald-500 text-white">
+            className="shadow-lg pl-2 pr-2 pt-1 pb-1 w-20 rounded-lg font-bold bg-emerald-400 hover:bg-emerald-500 text-white">
             SUBMIT
           </button>
         </div>

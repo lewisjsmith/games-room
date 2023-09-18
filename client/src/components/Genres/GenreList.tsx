@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import GenreTile from "./GenreTile";
 
 export default function GenreList() {
   const [genreList, setGenreList] = useState([]);
@@ -23,9 +22,9 @@ export default function GenreList() {
           {genreList.length === 0 && <li className="w-full text-center" key={"null-result"}><h2>No genres found.</h2></li>}
           {genreList.map((genre) => {
             return (
-              <li className="w-full text-center" key={genre._id}>
-                <Link to={`/genre/${genre._id}`} className="w-full">
-                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{genre.title}</button>
+              <li className="w-full text-center" key={genre["_id"]}>
+                <Link to={`/genre/${genre["_id"]}`} className="w-full">
+                  <button className="w-full text-left pl-3 pr-3 pt-2 pb-2 rounded-lg bg-transparent hover:bg-orange-300 hover:text-white hover:font-bold font-bold">{genre["title"]}</button>
                 </Link>
               </li>
             );

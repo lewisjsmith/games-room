@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function GenreForm() {
@@ -6,7 +6,7 @@ export default function GenreForm() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
 
-  const handleTitleChange = (e) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 

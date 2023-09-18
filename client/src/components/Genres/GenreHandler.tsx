@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import GenreTile from "./GenreTile";
 
-export default function GenreHandler(props) {
+export default function GenreHandler(props: IHandler) {
 
   const navigate = useNavigate();
 
@@ -49,4 +49,16 @@ export default function GenreHandler(props) {
         </div>
       </div>
     );
+}
+
+interface IHandler {
+  details: detailsStructure | undefined,
+  genreId: string,
+  toggleEdit: ()=> void,
+  toggleFade: ()=> void
+}
+
+interface detailsStructure {
+  _id: string,
+  title: string,
 }

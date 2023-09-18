@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import GameForm from "../components/Games/GameForm";
 import GamePage from "../components/Games/GamePage";
 
-export default function GameRoutes(props) {
+export default function GameRoutes(props: FadeFunction) {
     
     return (
         <Routes>
@@ -11,4 +11,8 @@ export default function GameRoutes(props) {
             <Route path="/:id" element={<GamePage toggleFade={props.toggleFade}/>} />
         </Routes>
     );
+}
+
+interface FadeFunction {
+    toggleFade: ()=> void
 }

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function EditWindow(props) {
+export default function EditWindow(props: IHandler) {
 
     const navigate = useNavigate();
 
@@ -16,22 +16,24 @@ export default function EditWindow(props) {
     }, [props.studioId]);
 
     useEffect(() => {
-        if (props.details.title) {
+        if (props.details && props.details.title) {
             setTitle(props.details.title);
         }
-    }, [props.details.title]);
+    }, [props.details]);
 
     useEffect(() => {
-        if (props.details.founded) {
+        if (props.details && props.details.founded) {
             setFounded(props.details.founded.split("T")[0]);
         }
-    }, [props.details.founded]);
+    }, [props.details]);
 
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target) {
+            setTitle(e.target.value);
+        }
     };
 
-    const handleFoundedChange = (e) => {
+    const handleFoundedChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFounded(e.target.value);
     };
 
@@ -95,3 +97,16 @@ export default function EditWindow(props) {
         </div>
     )
 }
+
+interface IHandler {
+    details: detailsStructure | undefined,
+    studioId: string,
+    toggleEdit: ()=> void,
+    toggleFade: ()=> void
+  }
+  
+  interface detailsStructure {
+    _id: string,
+    title: string,
+    founded: string
+  }
