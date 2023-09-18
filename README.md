@@ -2,7 +2,6 @@
 Inventory management for a fictional games rental company.
 
 To-do:
-- 404 page styling
 - Directory tidy for client-side code
 - Test deployment, docker packaging, env variable hiding, remove/disable logging
 - GitHub documentation
