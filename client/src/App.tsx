@@ -16,54 +16,67 @@ import ErrorPage from "./components/Navigation/ErrorPage";
 
 function App() {
 
-  const [mobile, setMobile] = useState(true);
+  const [mobile, setMobile] = useState((window.innerWidth <= 700));
   const [menu, setMenu] = useState(false);
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 700px)").matches;
-    setMobile(!mql);
-  }, [])
 
-  function toggleMenu() {
-    setMenu(!menu);
-  }
+    window.addEventListener("resize", () => {
+      const mql = window.matchMedia("(min-width: 700px)").matches;
+      setMobile(!mql);
+    });
 
-  function toggleFade() {
-    setFade(!fade);
-  }
+    return (
 
-  return (
-    <ScreenContext.Provider value={mobile}>
-      <div className="position: relative flex w-full h-full">
+      window.removeEventListener("resize", () => {
+        const mql = window.matchMedia("(min-width: 700px)").matches;
+        setMobile(!mql);
+      })
 
-        {fade && <div className="position: absolute top-0 left-0 bg-black bg-opacity-50 w-full h-full z-40"></div>}
+    );
 
-        {mobile && <Hamburger menu={menu} toggleMenu={toggleMenu} />}
+}, [])
 
-        {mobile && menu && (
-          < NavigationMobile toggleMenu={toggleMenu} />
-        )}
+function toggleMenu() {
+  setMenu(!menu);
+}
 
-        {!mobile && (
-          < Navigation />
-        )}
+function toggleFade() {
+  setFade(!fade);
+}
 
-        <div className="h-screen w-full">
-          <Routes>
-            <Route index element={<Home />} />
-            <Route path="/game/*" element={<GameRoutes toggleFade={toggleFade} />} />
-            <Route path="/games" element={<GamesList />} />
-            <Route path="/studio/*" element={<StudioRoutes toggleFade={toggleFade}/>} />
-            <Route path="/studios" element={<StudiosList />} />
-            <Route path="/genre/*" element={<GenreRoutes toggleFade={toggleFade}/>} />
-            <Route path="/genres" element={<GenreList />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-        </div>
+return (
+  <ScreenContext.Provider value={mobile}>
+    <div className="position: relative flex w-full h-full">
+
+      {fade && <div className="position: absolute top-0 left-0 bg-black bg-opacity-50 w-full h-full z-40"></div>}
+
+      {mobile && <Hamburger menu={menu} toggleMenu={toggleMenu} />}
+
+      {mobile && menu && (
+        < NavigationMobile toggleMenu={toggleMenu} />
+      )}
+
+      {!mobile && (
+        < Navigation />
+      )}
+
+      <div className="h-screen w-full">
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/game/*" element={<GameRoutes toggleFade={toggleFade} />} />
+          <Route path="/games" element={<GamesList />} />
+          <Route path="/studio/*" element={<StudioRoutes toggleFade={toggleFade} />} />
+          <Route path="/studios" element={<StudiosList />} />
+          <Route path="/genre/*" element={<GenreRoutes toggleFade={toggleFade} />} />
+          <Route path="/genres" element={<GenreList />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
       </div>
-    </ScreenContext.Provider>
-  );
+    </div>
+  </ScreenContext.Provider>
+);
 }
 
 export default App;

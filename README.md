@@ -2,11 +2,8 @@
 Inventory management for a fictional games rental company.
 
 To-do:
-- Hover effects for instances. 
-- Directory tidy for client-side code
-- Test deployment, docker packaging, env variable hiding, remove/disable logging
-- GitHub documentation
-- Form errors from server-side to client-side
+- Visual form filling feedback outside of console logs - translate server responses to client.
+- Hover effects for gameinstances. 
 - Tackle typescript errors (Complex)
 
 Used technologies:

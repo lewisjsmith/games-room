@@ -6,8 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api/v1": "http://localhost:3000/"
-    }
+      // Local machine CLI
+      // "/api/v1": "http://localhost:3000/"
+      // Docker
+      "/api/v1": "http://server:3000/"
+    },
+    host: true
   },
   build: {
     outDir: "./dist/"
